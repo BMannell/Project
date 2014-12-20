@@ -3,7 +3,38 @@ Game Design
 ================= Chess =================
 -the main class
 -represents the game flow
+
+/* GAME FLOW
+-load game? y/n
+
+-initialize game
+    - choose team
+-display turn
+
+-user selects piece
+
+-receive moves for piece selected (highlighted)
+
+-select move from those available
+
+-Chess updates current board from move that's selected
+    -"Chess" sends move wantd to be made to engine (Board,Piece and new position)
+    -"Engine" class evaluates move
+    -"Chess" updates board to what is returned
+
+-Engine evaluates game condition (check, checkmate, stalemate, none)
+
+-Chess class changes turn   
+
+*/
+
 --------------- variables ----------------
+int stalemateCounter;
+-count for ineffective moves made before stalemate
+
+Move move;
+-move to be made by a player
+-received from a Player's AI decision or from GUI actions 
 
 boolean turn;
 -current player turn
@@ -15,15 +46,14 @@ ArayList<String> gamelog;
 -holds the move logs that happen during the game.
 -used for checking for èn passant capability of getMoves method
 
-
-================= Engine =================
--able to take arbitrary board state and evaluate/operate on it
--represents the rules of chess
---------------- variables ----------------
-
-
 --------------- methods ------------------
-void logMove();
+
+void loadGame(file logFile);
+-call to gui to prompt for file location
+
+void initializeGame();
+
+void logMove(Move m);
 -called after move is made to add move log to string buffer
 
 boolean exportGame(String filename);
@@ -33,7 +63,44 @@ boolean exportGame(String filename);
 boolean importGame(String gameFile);
 -import game log file.
 -can be played from or replayed.
--success
+-returns success
+
+boolean checkStalemate();
+-check stalemate conditions
+-in the Chess class because of need for counter (Engine is stateless)
+
+
+main(){
+
+GUI.drawBoard
+
+loop{
+    if(turn){ // player 2
+        move = Player2.getMove();
+    }
+    else{ // player 1
+        move = Player1.getMove();
+    }
+    board = Engine.makeMove(move);
+    GUI.drawBoard();
+    logMove(Move m)
+    
+    checkStalemate();
+    Engine.stateCheck();
+    
+    
+    turn = !turn;
+}// end loop
+
+}// end main
+
+================= Engine =================
+-able to take arbitrary board state and evaluate/operate on it
+-represents the rules of chess
+--------------- variables ----------------
+
+
+--------------- methods ------------------
 
 ArrayList[][] getMoves(Piece p);
 -get moves of selected piece
@@ -44,8 +111,7 @@ boolean movePiece(Piece p, int[] position);
 
 stateCheck();
 -check
--checkmate
--stalemate
+-checkmate (only if check is true)
 -none of the above
 
 
@@ -63,8 +129,47 @@ String type
 JPanel[][] boardDisplay;
 JPanel movesDisplay;
 
+--------------- methods ------------------
+void drawBoard(Piece[][] board);
+
+String promptLogLocation();
+-prompts user for location of log file to load
+
+void replayGame(file logFile);
+-replays the game turn by turn as per the log file
+
+
+================= Player =================
+--------------- variables ----------------
+boolean isHuman
+-is the player human or ai?
+--------------- methods ------------------
+
+Move getMove();
+-decide whether to make human or AI move based on isHuman
+
+Move humanMove();
+-calls to gui to follow human move-making protocol
+
+Move AIMove();
+-make move based on AI move-making protocol
+
 
 ================= AI Agent =================
+-will be a member of the Player class
+-should only be used if the player is an AI player
+
+
+================= Move ===================
+-------------- variables -----------------
+Piece[][] boardState  //boardstate
+Piece piece           //piece that is moving
+int x;                //new x position
+int y;                //new y position
+
+-------------- methods -------------------
+Move(board, state, position);
+-constructor
 
 
 ================= Idea bank =================
