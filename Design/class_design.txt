@@ -1,0 +1,72 @@
+Game Design
+
+================= Chess =================
+-the main class
+-represents the game flow
+--------------- variables ----------------
+
+boolean turn;
+-current player turn
+
+Piece[][] board=new Piece[8][8];
+- board that is actually acted upon
+
+ArayList<String> gamelog;
+-holds the move logs that happen during the game.
+-used for checking for èn passant capability of getMoves method
+
+
+================= Engine =================
+-able to take arbitrary board state and evaluate/operate on it
+-represents the rules of chess
+--------------- variables ----------------
+
+
+--------------- methods ------------------
+void logMove();
+-called after move is made to add move log to string buffer
+
+boolean exportGame(String filename);
+-exports game moves to a log file from a move list string buffer.
+-returns success or failure of writing (easily done from necessary try catch for file IO)
+
+boolean importGame(String gameFile);
+-import game log file.
+-can be played from or replayed.
+-success
+
+ArrayList[][] getMoves(Piece p);
+-get moves of selected piece
+-check enpassant if pawn piece
+
+boolean movePiece(Piece p, int[] position);
+
+
+stateCheck();
+-check
+-checkmate
+-stalemate
+-none of the above
+
+
+================= Piece =================
+
+--------------- variables ----------------
+Boolean colour
+int[] position
+String type
+
+
+================= GUI =================
+
+--------------- variables ----------------
+JPanel[][] boardDisplay;
+JPanel movesDisplay;
+
+
+================= AI Agent =================
+
+
+================= Idea bank =================
+-earl preference themed pieces (gundam, muppets?)
+-pick different colours for teams
