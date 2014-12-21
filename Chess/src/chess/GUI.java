@@ -31,6 +31,7 @@ public class GUI extends JFrame{
     /**
      * intialize menu bar
      */
+    
     private void initMenuBar(){
         //Where the GUI is created:
         JMenuBar menuBar;
@@ -47,20 +48,24 @@ public class GUI extends JFrame{
                 "The only menu in this program that has menu items");
         menuBar.add(menu);
         
-        this.setJMenuBar(menuBar);
+        setJMenuBar(menuBar);
     }
     
     private void initGameBoard() {
         JPanel boardDisplay = new JPanel(new GridLayout(8, 8));
+        boardDisplay.setSize(240,240);
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
                 JPanel jp = new JPanel();
                 jp.setBorder(BorderFactory.createLineBorder(Color.black));
-                jp.setMaximumSize(new Dimension(30, 30));
-                jp.setMinimumSize(new Dimension(30, 30));
+                jp.setSize(30, 30);
                 boardDisplay.add(jp);
             }
         }
         setContentPane(boardDisplay);
     }
+    
+    //public void drawBoard(Piece[][] p){
+        
+    //}
 }
