@@ -24,6 +24,7 @@ public class GUI extends JFrame{
         super("Chess");
         initMenuBar();
         initGameBoard();
+        setSize(480,480);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
     }
@@ -52,15 +53,24 @@ public class GUI extends JFrame{
     }
     
     private void initGameBoard() {
+        boolean colour = true;
         JPanel boardDisplay = new JPanel(new GridLayout(8, 8));
-        boardDisplay.setSize(240,240);
+        boardDisplay.setSize(480,480);
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
-                JPanel jp = new JPanel();
+                BoardSquare jp;
+                if(colour){
+                    jp = new BoardSquare(Color.white, x, y);
+                }
+                else{
+                    jp = new BoardSquare(Color.black, x, y);
+                }
                 jp.setBorder(BorderFactory.createLineBorder(Color.black));
-                jp.setSize(30, 30);
+                jp.setSize(60, 60);
                 boardDisplay.add(jp);
+                colour = !colour;
             }
+            colour = !colour;
         }
         setContentPane(boardDisplay);
     }
@@ -68,4 +78,34 @@ public class GUI extends JFrame{
     //public void drawBoard(Piece[][] p){
         
     //}
+    
+    public class BoardSquare extends JPanel{
+        
+        Color initialColor;
+        int X;
+        int Y;
+        
+        public BoardSquare(Color bg, int x, int y){
+            initialColor = bg;
+            X = x;
+            Y = y;
+            setBackground(bg);
+        }
+        
+        public void revertColor(){
+            setBackground(initialColor);
+        }
+        
+        public void setBlue(){
+            setBackground(Color.CYAN);
+        }
+        
+        public void setRed(){
+            setBackground(Color.RED);
+        }
+        
+        public void setGreen(){
+            setBackground(Color.GREEN);
+        }
+    }
 }
