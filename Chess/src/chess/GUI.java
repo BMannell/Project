@@ -25,6 +25,7 @@ public class GUI extends JFrame{
         initMenuBar();
         initGameBoard();
         setSize(480,480);
+        setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
     }
@@ -119,6 +120,7 @@ public class GUI extends JFrame{
         }
         
         public void selectPiece(){
+            System.out.println(X + ":" + Y);
             //if(p!=null && p.team == 0){
             //    GUI.getMoves(X,Y);
             //}
