@@ -11,10 +11,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
-/**
- *
- * @author Ben
- */
 
 public class GUI extends JFrame{
     
