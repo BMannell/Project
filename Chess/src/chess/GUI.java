@@ -75,6 +75,11 @@ public class GUI extends JFrame{
         setContentPane(boardDisplay);
     }
     
+    private int[][] getMoves(int x, int y){
+        //return Engine.getMoves
+        return new int[][]{{0, 0}};
+    }
+    
     //public void drawBoard(Piece[][] p){
         
     //}
@@ -84,12 +89,17 @@ public class GUI extends JFrame{
         Color initialColor;
         int X;
         int Y;
-        
+        //Piece p;
         public BoardSquare(Color bg, int x, int y){
             initialColor = bg;
             X = x;
             Y = y;
             setBackground(bg);
+            addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+               selectPiece();
+            }
+        });
         }
         
         public void revertColor(){
@@ -106,6 +116,12 @@ public class GUI extends JFrame{
         
         public void setGreen(){
             setBackground(Color.GREEN);
+        }
+        
+        public void selectPiece(){
+            //if(p!=null && p.team == 0){
+            //    GUI.getMoves(X,Y);
+            //}
         }
     }
 }
