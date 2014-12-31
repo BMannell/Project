@@ -42,6 +42,8 @@ public class Piece {
         }
         image.setVisible(true);
     }
+    
+    //stolen code need to find new way or cite
     public static BufferedImage resize(BufferedImage image, int width, int height) {
         BufferedImage bi = new BufferedImage(width, height, BufferedImage.TRANSLUCENT);
         Graphics2D g2d = (Graphics2D) bi.createGraphics();
