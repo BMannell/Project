@@ -1,14 +1,20 @@
 package chess;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -20,50 +26,120 @@ import javax.swing.JPanel;
 public class GUI extends JFrame{
     
     private BoardSquare[][] board = new BoardSquare[8][8];
-    Chess chess;
-    BoardSquare selectedSquare;
+    Chess chess;        //chess controller
+    JPanel boardPane;   //game board display
     
     public GUI(Chess c){
         super("Chess");
         chess = c;
-        initMenuBar();
-        initGameBoard();
-        setSize(480,480);
-        setResizable(false);
+        setResizable(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
     }
     
-    /**
-     * Initializes menu bar
-     */
-    
-    private void initMenuBar(){
-        //Where the GUI is created:
-        JMenuBar menuBar;
-        JMenu menu, submenu;
-        JMenuItem menuItem;
-
-        //Create the menu bar.
-        menuBar = new JMenuBar();
-
-        //Build the first menu.
-        menu = new JMenu("A Menu");
-        menu.setMnemonic(KeyEvent.VK_A);
-        menu.getAccessibleContext().setAccessibleDescription(
-                "The only menu in this program that has menu items");
-        menuBar.add(menu);
+    public void displayMainMenu(){
         
-        setJMenuBar(menuBar);
+        setSize(180,150);
+        
+        JPanel main = new JPanel();
+        
+        main.setLayout(new BoxLayout(main, 1));
+        
+        // button to start new game
+        JButton start = new JButton("New Game");
+        start.setAlignmentX(Component.CENTER_ALIGNMENT);
+        main.add(Box.createRigidArea(new Dimension(0, 10)));
+        start.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+               newGame();
+            }
+        });
+        main.add(start);
+        
+        //button to load game from file
+        JButton load = new JButton("Load Game");
+        load.setAlignmentX(Component.CENTER_ALIGNMENT);
+        main.add(Box.createRigidArea(new Dimension(0, 10)));
+        load.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+               System.out.println("Load");
+            }
+        });
+        load.setEnabled(false);
+        main.add(load);
+        
+        //button to whitetate game file
+        JButton spec = new JButton("Spectate Game");
+        spec.setAlignmentX(Component.CENTER_ALIGNMENT);
+        main.add(Box.createRigidArea(new Dimension(0, 10)));
+        spec.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+               System.out.println("Spec");
+            }
+        });
+        spec.setEnabled(false);
+        main.add(spec);
+        
+        getContentPane().add(main);
     }
     
-    /**
-     * Initializes GameBoard
-     */
+    
+    public void newGame(){
+        getContentPane().removeAll();
+        JPanel colors = new JPanel();
+        colors.setLayout(new BoxLayout(colors,1));
+        
+        colors.add(Box.createRigidArea(new Dimension(0, 20)));
+        
+        /* White */
+        JButton white = new JButton("White");
+        white.setAlignmentX(Component.CENTER_ALIGNMENT);
+        white.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+               chess.initGameBoard(true);
+               boardSetup();
+            }
+        });
+        
+        colors.add(Box.createRigidArea(new Dimension(0, 10)));
+        colors.add(white);
+        
+        /* Black */
+        JButton black = new JButton("Black");
+        black.setAlignmentX(Component.CENTER_ALIGNMENT);
+        black.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+               chess.initGameBoard(false);
+               boardSetup();
+            }
+        });
+        
+        colors.add(Box.createRigidArea(new Dimension(0, 10)));
+        colors.add(black);
+        
+        colors.setVisible(true);
+        
+        getContentPane().add(colors);//Adding to content pane, not to Frame
+        validate();
+        repaint();
+    }
+    
+    private void boardSetup(){
+        initGameBoard();
+        drawBoard();
+        setSize(512,512);
+        getContentPane().removeAll();
+        getContentPane().add(boardPane);
+        validate();
+        repaint();
+        
+    }
+    
+    /* Initializes GameBoard */
     private void initGameBoard() {
         boolean colour = true;
-        JPanel boardDisplay = new JPanel(new GridLayout(8, 8));
-        boardDisplay.setSize(512,512);
+        boardPane = new JPanel(new GridLayout(8, 8));
+        boardPane.setSize(512,512);
         for (int y = 0; y < 8; y++) {
             for (int x = 0; x < 8; x++) {
                 BoardSquare jp;
@@ -76,20 +152,14 @@ public class GUI extends JFrame{
                 jp.setBorder(BorderFactory.createLineBorder(Color.black));
                 jp.setSize(64, 64);
                 board[y][x] = jp;
-                boardDisplay.add(jp);
+                boardPane.add(jp);
                 colour = !colour;
             }
             colour = !colour;
         }
-        setContentPane(boardDisplay);
     }
     
-    /**
-     * Draws a gameboard
-     * 
-     * @param p 
-     * -gameboard to draw
-     */
+    /* Draws current gameboard */
     public void drawBoard(){
         for(int y = 0; y<8;y++){
             for(int x=0;x<8;x++){
@@ -109,8 +179,30 @@ public class GUI extends JFrame{
         }
     }
     
+    /* Initializes menu bar 
+    private void initMenuBar(){
+        //Where the GUI is created:
+        JMenuBar menuBar;
+        JMenu menu, submenu;
+        JMenuItem menuItem;
+
+        //Create the menu bar.
+        menuBar = new JMenuBar();
+
+        //Build the first menu.
+        menu = new JMenu("A Menu");
+        menu.setMnemonic(KeyEvent.VK_A);
+        menu.getAccessibleContext().setAccessibleDescription(
+                "The only menu in this program that has menu items");
+        menuBar.add(menu);
+        
+        setJMenuBar(menuBar);
+    }
+    */
+    
     /**
-     * GameSquare
+     * BoardSquare
+     * 
      * Variables
      * -position
      * -piece
@@ -164,6 +256,4 @@ public class GUI extends JFrame{
             add(piece.image);
         }
     }
-    
-    
 }
