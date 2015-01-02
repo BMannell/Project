@@ -18,7 +18,7 @@ public class Chess {
     
     public Chess(){
         gui = new GUI(this);
-        gui.displayMainMenu();
+        gui.customGame();
     }
     
     public void playerColour(boolean c){

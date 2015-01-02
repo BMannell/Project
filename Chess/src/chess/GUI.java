@@ -32,9 +32,10 @@ public class GUI extends JFrame{
     public GUI(Chess c){
         super("Chess");
         chess = c;
-        setResizable(true);
+        setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
+        
     }
     
     public void displayMainMenu(){
@@ -80,9 +81,26 @@ public class GUI extends JFrame{
         spec.setEnabled(false);
         main.add(spec);
         
+        JButton test = new JButton("Custom Board");
+        test.setAlignmentX(Component.CENTER_ALIGNMENT);
+        main.add(Box.createRigidArea(new Dimension(0, 10)));
+        test.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+               System.out.println("TestMode");
+            }
+        });
+        test.setEnabled(false);
+        main.add(test);
+        
         getContentPane().add(main);
     }
     
+    public void customGame(){
+        setSize(798,512);
+        getContentPane().add(new CustomBoard());
+        validate();
+        repaint();
+    }
     
     public void newGame(){
         getContentPane().removeAll();
@@ -149,8 +167,6 @@ public class GUI extends JFrame{
                 else{
                     jp = new BoardSquare(Color.black, x, y);
                 }
-                jp.setBorder(BorderFactory.createLineBorder(Color.black));
-                jp.setSize(64, 64);
                 board[y][x] = jp;
                 boardPane.add(jp);
                 colour = !colour;
@@ -222,10 +238,12 @@ public class GUI extends JFrame{
             Y = y;
             setBackground(bg);
             addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-               selectPiece();
-            }
-        });
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    selectPiece();
+                }
+            });
+            setSize(64, 64);
+            setBorder(BorderFactory.createLineBorder(Color.black));
         }
         
         public void revertColor(){
