@@ -11,20 +11,27 @@ package chess;
  */
 public class Move {
 
-    Piece[][] boardState; //boardstate
+    //Piece[][] boardState; //boardstate
 
     Piece piece;          //piece that is moving
 
-    int x;                //new x position
-    int y;                //new y position
+    int oldX;                // old x position
+    int oldY;                // old y position
+    
+    int newX;                // new x position
+    int newY;                // new y position
     
     public Move(){
         
     }
-    public Move(Piece[][] board, Piece p, int x, int y) {
-        boardState = board;
+    public Move(Piece p, int oX, int oY, int nX, int nY) {
+        //boardState = board;
+        
         piece = p;
-        this.x = x;
-        this.y = y;
+        this.oldX = oX;
+        this.oldY = oY;
+
+        this.newX = nX;
+        this.newY = nY;
     }
 }
