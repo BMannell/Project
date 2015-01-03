@@ -19,6 +19,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -29,12 +30,13 @@ public class CustomBoard extends JPanel{
     Square[][] board = new Square[8][8];
     Square[][] select = new Square[8][4];
     Square selectedPiece;
-    boolean playerColour = true;
+    boolean playerColour = true;    //colour of human player, true = white, false = black
     boolean removePiece = false; //if the remove button is selected
     boolean addPiece = false;   //if piece has been selected to add
     JPanel remove;
+    Chess chess;
     
-    public CustomBoard(){
+    public CustomBoard(Chess c){
         setSize(512,512);
         setLayout(new BoxLayout(this,BoxLayout.X_AXIS));
         add(createGameBoard());
@@ -42,6 +44,7 @@ public class CustomBoard extends JPanel{
         add(createOptions());
         add(Box.createRigidArea(new Dimension(10, 0)));
         add(createPieceSelect());
+        chess = c;
     }
     
     private JPanel createGameBoard(){
@@ -72,6 +75,7 @@ public class CustomBoard extends JPanel{
         opts.setLayout(new BoxLayout(opts, BoxLayout.Y_AXIS));
         opts.setVisible(true);
         opts.add(Box.createRigidArea(new Dimension(0,70)));
+        
         //colour select for player
         JPanel pColor = new JPanel();
         pColor.setLayout(new BoxLayout(pColor, BoxLayout.Y_AXIS));
@@ -127,7 +131,17 @@ public class CustomBoard extends JPanel{
         });
         
         opts.add(remove);
-        opts.add(new JPanel());
+        opts.add(Box.createRigidArea(new Dimension(0,70)));
+        
+        /* start button */
+        JButton start = new JButton("Start");
+        start.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                chess.initCustomGameBoard(board, playerColour);
+            }
+        });
+        start.setAlignmentX(Component.CENTER_ALIGNMENT);
+        opts.add(start);
         return opts;
     }
     
@@ -159,27 +173,27 @@ public class CustomBoard extends JPanel{
         
         //white pieces
         for(int i=0;i<8;i++)
-            select[i][0] = new Square(new FakePiece("pawn-white",i,0));
-        select[0][1] = new Square(new FakePiece("rook-white",0,1));
-        select[1][1] = new Square(new FakePiece("knight-white",1,1));
-        select[2][1] = new Square(new FakePiece("bishop-white",2,1));
-        select[3][1] = new Square(new FakePiece("queen-white",3,1));
-        select[4][1] = new Square(new FakePiece("king-white",4,1));
-        select[5][1] = new Square(new FakePiece("bishop-white",5,1));
-        select[6][1] = new Square(new FakePiece("knight-white",6,1));
-        select[7][1] = new Square(new FakePiece("rook-white",7,1));
+            select[i][0] = new Square(new FakePiece("pawn","white",i,0));
+        select[0][1] = new Square(new FakePiece("rook","white",0,1));
+        select[1][1] = new Square(new FakePiece("knight","white",1,1));
+        select[2][1] = new Square(new FakePiece("bishop","white",2,1));
+        select[3][1] = new Square(new FakePiece("queen","white",3,1));
+        select[4][1] = new Square(new FakePiece("king","white",4,1));
+        select[5][1] = new Square(new FakePiece("bishop","white",5,1));
+        select[6][1] = new Square(new FakePiece("knight","white",6,1));
+        select[7][1] = new Square(new FakePiece("rook","white",7,1));
         
         //black pieces
         for(int i=0;i<8;i++)
-            select[i][2] = new Square(new FakePiece("pawn-black",i,2));
-        select[0][3] = new Square(new FakePiece("rook-black",0,3));
-        select[1][3] = new Square(new FakePiece("knight-black",1,3));
-        select[2][3] = new Square(new FakePiece("bishop-black",2,3));
-        select[3][3] = new Square(new FakePiece("queen-black",3,3));
-        select[4][3] = new Square(new FakePiece("king-black",4,3));
-        select[5][3] = new Square(new FakePiece("bishop-black",5,3));
-        select[6][3] = new Square(new FakePiece("knight-black",6,3));
-        select[7][3] = new Square(new FakePiece("rook-black",7,3));
+            select[i][2] = new Square(new FakePiece("pawn","black",i,2));
+        select[0][3] = new Square(new FakePiece("rook","black",0,3));
+        select[1][3] = new Square(new FakePiece("knight","black",1,3));
+        select[2][3] = new Square(new FakePiece("bishop","black",2,3));
+        select[3][3] = new Square(new FakePiece("queen","black",3,3));
+        select[4][3] = new Square(new FakePiece("king","black",4,3));
+        select[5][3] = new Square(new FakePiece("bishop","black",5,3));
+        select[6][3] = new Square(new FakePiece("knight","black",6,3));
+        select[7][3] = new Square(new FakePiece("rook","black",7,3));
         
         for(Square[] s: select)
             for(Square sq: s){
@@ -268,15 +282,17 @@ public class CustomBoard extends JPanel{
         }
     }
     
-    class FakePiece{
+    public class FakePiece{
         
         public JLabel image;
         public int X,Y;
-        public String color, type;
-        public FakePiece(String type, int x, int y) {
+        public String colour, type;
+        public FakePiece(String type, String colour, int x, int y) {
             X=x;
             Y=y;
-            String imagePath = "/image/".concat(type + ".gif");
+            this.type = type;
+            this.colour = colour;
+            String imagePath = "/image/".concat(type + "-" + colour + ".gif");
             try{
             BufferedImage myPicture = ImageIO.read(this.getClass().getResource(imagePath));
             myPicture = resize(myPicture, 40, 40);

@@ -1,5 +1,6 @@
 package chess;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -9,18 +10,23 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.text.NumberFormat;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.border.TitledBorder;
 
 
 public class GUI extends JFrame{
@@ -28,19 +34,21 @@ public class GUI extends JFrame{
     private BoardSquare[][] board = new BoardSquare[8][8];
     Chess chess;        //chess controller
     JPanel boardPane;   //game board display
+    JRadioButton whiteButton;       //colour select
+    JFormattedTextField plySelect;  //ply input
     
     public GUI(Chess c){
         super("Chess");
         chess = c;
-        setResizable(false);
+        setResizable(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
-        
+        displayMainMenu();
     }
     
     public void displayMainMenu(){
         
-        setSize(180,150);
+        setSize(180,200);
         
         JPanel main = new JPanel();
         
@@ -52,7 +60,7 @@ public class GUI extends JFrame{
         main.add(Box.createRigidArea(new Dimension(0, 10)));
         start.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-               newGame();
+               displayGameOptions();
             }
         });
         main.add(start);
@@ -86,63 +94,106 @@ public class GUI extends JFrame{
         main.add(Box.createRigidArea(new Dimension(0, 10)));
         test.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-               System.out.println("TestMode");
+              customGame();
             }
         });
-        test.setEnabled(false);
         main.add(test);
         
         getContentPane().add(main);
     }
     
     public void customGame(){
+        getContentPane().removeAll();
         setSize(798,512);
-        getContentPane().add(new CustomBoard());
+        getContentPane().add(new CustomBoard(chess));
         validate();
         repaint();
     }
     
-    public void newGame(){
+    public void displayGameOptions() {
+        setSize(180,250);
         getContentPane().removeAll();
         JPanel colors = new JPanel();
-        colors.setLayout(new BoxLayout(colors,1));
+        colors.setLayout(new BoxLayout(colors, BoxLayout.Y_AXIS));
+        colors.setVisible(true);
         
-        colors.add(Box.createRigidArea(new Dimension(0, 20)));
+        //colour select for player
+        JPanel pColor = new JPanel();
+        pColor.setLayout(new BoxLayout(pColor, BoxLayout.Y_AXIS));
+        pColor.setVisible(true);
+        pColor.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        //create border for radio colour select
+        TitledBorder title = BorderFactory.createTitledBorder(
+                BorderFactory.createLineBorder(Color.BLACK), "Colour");
+        title.setTitleJustification(TitledBorder.CENTER);
+        pColor.setBorder(title);
+
+        //create radio buttons
+        whiteButton = new JRadioButton("White");
+        whiteButton.setSelected(true);
+        JRadioButton blackButton = new JRadioButton("Black");
+
+        //group radio buttons
+        ButtonGroup group = new ButtonGroup();
+        group.add(whiteButton);
+        group.add(blackButton);
+
+        //add buttons to panel
+        pColor.add(whiteButton);
+        pColor.add(blackButton);
+
+        colors.add(Box.createRigidArea(new Dimension(0, 10)));
+        colors.add(pColor);
+        colors.add(Box.createRigidArea(new Dimension(0, 10)));
         
-        /* White */
-        JButton white = new JButton("White");
+        /* Ply input panel*/
+        JPanel ply = new JPanel();
+        ply.setVisible(true);
+        title = BorderFactory.createTitledBorder(
+                BorderFactory.createLineBorder(Color.BLACK), "Ply");
+        title.setTitleJustification(TitledBorder.CENTER);
+        ply.setBorder(title);
+        Dimension plyD = new Dimension(80,60);
+        ply.setMaximumSize(plyD);
+        ply.setMinimumSize(plyD);
+        ply.setPreferredSize(plyD);
+        ply.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        
+        /* Ply input field */
+        plySelect = new JFormattedTextField(NumberFormat.getIntegerInstance());
+        plySelect.setValue(new Integer(8));
+        plySelect.setColumns(3);
+        
+        ply.add(plySelect);
+        
+        colors.add(ply);
+        
+        /* Start */
+        JButton white = new JButton("Start");
         white.setAlignmentX(Component.CENTER_ALIGNMENT);
         white.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-               chess.initGameBoard(true);
-               boardSetup();
+                int ply = (int)(long)plySelect.getValue();
+                if(ply < 1){
+                    ply = 8;
+                }
+                chess.newGame(ply,whiteButton.isSelected());
+                boardSetup();
             }
         });
         
         colors.add(Box.createRigidArea(new Dimension(0, 10)));
         colors.add(white);
-        
-        /* Black */
-        JButton black = new JButton("Black");
-        black.setAlignmentX(Component.CENTER_ALIGNMENT);
-        black.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-               chess.initGameBoard(false);
-               boardSetup();
-            }
-        });
-        
         colors.add(Box.createRigidArea(new Dimension(0, 10)));
-        colors.add(black);
-        
-        colors.setVisible(true);
         
         getContentPane().add(colors);//Adding to content pane, not to Frame
         validate();
         repaint();
     }
     
-    private void boardSetup(){
+    public void boardSetup(){
         initGameBoard();
         drawBoard();
         setSize(512,512);
@@ -150,7 +201,6 @@ public class GUI extends JFrame{
         getContentPane().add(boardPane);
         validate();
         repaint();
-        
     }
     
     /* Initializes GameBoard */
@@ -190,9 +240,17 @@ public class GUI extends JFrame{
     public void cleanBoard(){
         for(BoardSquare[] bs: board){
             for(BoardSquare b: bs){
-                b.revertColor();
+                b.revertColour();
             }
         }
+    }
+    
+    public void lock(){
+        boardPane.setEnabled(false);
+    }
+    
+    public void unlock(){
+        boardPane.setEnabled(true);
     }
     
     /* Initializes menu bar 
@@ -232,6 +290,7 @@ public class GUI extends JFrame{
         int Y;
         Piece piece;
         
+        boolean toMove = false; //set to true if mvoe square
         public BoardSquare(Color bg, int x, int y){
             initialColor = bg;
             X = x;
@@ -239,14 +298,14 @@ public class GUI extends JFrame{
             setBackground(bg);
             addMouseListener(new java.awt.event.MouseAdapter() {
                 public void mouseClicked(java.awt.event.MouseEvent evt) {
-                    selectPiece();
+                    makeMove();
                 }
             });
             setSize(64, 64);
             setBorder(BorderFactory.createLineBorder(Color.black));
         }
         
-        public void revertColor(){
+        public void revertColour(){
             setBackground(initialColor);
         }
         
@@ -272,6 +331,19 @@ public class GUI extends JFrame{
         public void addPiece(Piece p){
             piece = p;
             add(piece.image);
+        }
+        
+        public void makeMove(){
+            if(toMove){
+                toMove =false;
+                revertColour();
+                chess.makeMove(new Move());
+            }
+            else if(piece != null && piece.team){
+                cleanBoard();
+                setBlue();
+                toMove = true;
+            }
         }
     }
 }

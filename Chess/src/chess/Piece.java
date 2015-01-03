@@ -22,9 +22,11 @@ public class Piece {
     String type;
     public JLabel image;
     
-    public Piece(boolean colour, boolean team, int[] pos, String t) {
+    public Piece(boolean colour, boolean team, String t) {
+        //System.out.println(colour);
+        //System.out.println(team);
+        //System.out.println(t);
         this.team = team;
-        position = pos;
         type = t;
         String imagePath;
         if (colour) {
