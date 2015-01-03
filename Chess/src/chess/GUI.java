@@ -163,7 +163,7 @@ public class GUI extends JFrame{
         
         /* Ply input field */
         plySelect = new JFormattedTextField(NumberFormat.getIntegerInstance());
-        plySelect.setValue(new Integer(8));
+        plySelect.setValue((long)8);
         plySelect.setColumns(3);
         
         ply.add(plySelect);
