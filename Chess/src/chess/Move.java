@@ -13,7 +13,7 @@ public class Move {
 
     //Piece[][] boardState; //boardstate
 
-    Piece piece;          //piece that is moving
+    //Piece piece;          //piece that is moving
 
     int oldX;                // old x position
     int oldY;                // old y position
@@ -24,10 +24,10 @@ public class Move {
     public Move(){
         
     }
-    public Move(Piece p, int oX, int oY, int nX, int nY) {
+    public Move(int oX, int oY, int nX, int nY) {
         //boardState = board;
         
-        piece = p;
+        //piece = p;
         this.oldX = oX;
         this.oldY = oY;
 
