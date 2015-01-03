@@ -70,9 +70,13 @@ public class Chess {
             for(int x =0; x<8;x++){
                 if(customBoard[y][x].piece != null){
                     String type = customBoard[y][x].piece.type;
-                    boolean col = ("white" == customBoard[y][x].piece.colour);
+                    boolean col = "white".equalsIgnoreCase(customBoard[y][x].piece.colour);
+                    System.out.println(customBoard[y][x].piece.colour);
                     boolean isHuman = (col == colour);
-                    currentState[y][x] = new Piece(col, isHuman, type, false);
+                    System.out.println(col);
+                    System.out.println(isHuman);
+                    System.out.println();
+                    currentState[y][x] = new Piece(col, isHuman, type, true);
                 }
             }
         }

@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -36,6 +37,7 @@ public class GUI extends JFrame{
     JPanel boardPane;   //game board display
     JRadioButton whiteButton;       //colour select
     JFormattedTextField plySelect;  //ply input
+    BoardSquare selectedPiece;      //piece to move
     
     public GUI(Chess c){
         super("Chess");
@@ -240,7 +242,7 @@ public class GUI extends JFrame{
     public void cleanBoard(){
         for(BoardSquare[] bs: board){
             for(BoardSquare b: bs){
-                b.revertColour();
+                b.clean();
             }
         }
     }
@@ -290,7 +292,8 @@ public class GUI extends JFrame{
         int Y;
         Piece piece;
         
-        boolean toMove = false; //set to true if mvoe square
+        boolean toMove = false; //set to true if red square
+        
         public BoardSquare(Color bg, int x, int y){
             initialColor = bg;
             X = x;
@@ -298,7 +301,7 @@ public class GUI extends JFrame{
             setBackground(bg);
             addMouseListener(new java.awt.event.MouseAdapter() {
                 public void mouseClicked(java.awt.event.MouseEvent evt) {
-                    makeMove();
+                    selectSquare();
                 }
             });
             setSize(64, 64);
@@ -321,29 +324,46 @@ public class GUI extends JFrame{
             setBackground(Color.GREEN);
         }
         
-        public void selectPiece(){
-            if(piece!=null && piece.team){
+        public void selectSquare() {
+            if (piece != null && piece.team) {
                 cleanBoard();
-                setBlue();
+                if (selectedPiece != null && selectedPiece == this) {
+                    selectedPiece = null;
+                } else {
+                    selectedPiece = this;
+                    setBlue();
+                    ArrayList<int[]> moves = Engine.getMoves(chess.currentState, Y, X);
+                    System.out.println("Got it" + moves.size());
+                    for (int[] move : moves) {
+                        board[move[0]][move[1]].setToMove();
+                    }
+                }
+            } else if (toMove) {
+                Move m = new Move(X, Y, selectedPiece.X, selectedPiece.Y);
+                chess.makeMove(m);
+                cleanBoard();
             }
         }
         
+        public void setToMove(){
+            if(piece != null){
+                setRed();
+            }else{
+                setGreen();
+            }
+            toMove = true;
+        }
         public void addPiece(Piece p){
+            removeAll();
             piece = p;
             add(piece.image);
+            validate();
+            repaint();
         }
         
-        public void makeMove(){
-            if(toMove){
-                toMove =false;
-                revertColour();
-                chess.makeMove(new Move());
-            }
-            else if(piece != null && piece.team){
-                cleanBoard();
-                setBlue();
-                toMove = true;
-            }
+        public void clean(){
+            toMove = false;
+            revertColour();
         }
     }
 }

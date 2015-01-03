@@ -24,10 +24,8 @@ public class Move {
     public Move(){
         
     }
-    public Move(Piece p, int oX, int oY, int nX, int nY) {
-        //boardState = board;
-        
-        piece = p;
+    public Move(int oX, int oY, int nX, int nY) {
+
         this.oldX = oX;
         this.oldY = oY;
 

@@ -13,25 +13,30 @@ public class Engine {
         // assuming the x and y coordinate scheme is correct
         switch (p.type) {
             case "pawn":
+                
                 int direction; // up or down depending on colour. Applied to any vertical positioning. only matters for pawn
         
                 if(p.colour){ // assuming true means white
-                    direction = 1; // up (y + movement*1 is upward movement)
+                    direction = -1; // up (y + movement*1 is upward movement)
                 }
                 else{
-                    direction = -1; // down (y + movement*-1 is downward movement)
+                    direction = 1; // down (y + movement*-1 is downward movement)
                 }
 
                 
-                if(state[x][y+(1*direction)] == null){ // if square ahead is empty
-                    availMoves.add(new int[]{x,y+(1*direction)});
+                if(state[x+(1*direction)][y] == null){ // if square ahead is empty
+                    availMoves.add(new int[]{x+(1*direction),y});
+                    if (!p.moved && state[x + (2 * direction)][y] == null) {
+                        availMoves.add(new int[]{x + (2 * direction), y});
+                    }
                 }
-                else if(state[x-1][y+(1*direction)] != null && state[x+1][y+(1*direction)].colour != p.colour){ // diagonally ahead to the left not empty and piece there is not same colour
-                   availMoves.add(new int[]{x-1,y+(1*direction)});
+                if(state[x+(1*direction)][y-1] != null && state[x+(1*direction)][y-1].colour != p.colour){ // diagonally ahead to the left not empty and piece there is not same colour
+                   availMoves.add(new int[]{x+(1*direction),y-1});
                 }
-                else if(state[x+1][y+(1*direction)] != null && state[x+1][y+(1*direction)].colour != p.colour){ // diagonally ahead to the left not empty and piece there is not same colour
-                   availMoves.add(new int[]{x+1,y+(1*direction)});
+                if(state[x+(1*direction)][y+1] != null && state[x+(1*direction)][y+1].colour != p.colour){ // diagonally ahead to the left not empty and piece there is not same colour
+                   availMoves.add(new int[]{x+(1*direction),y+1});
                 }
+
                 break;
                 
                 
