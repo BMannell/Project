@@ -20,13 +20,13 @@ public class Piece {
     boolean team; // whether owning player is human or AI
     boolean moved; // whether the piece has moved or not
     
-    int[] position;
+    
     
     String type;
     public JLabel image;
     
 
-    public Piece(boolean colour, boolean team, int[] pos, String t, boolean m) {
+    public Piece(boolean colour, boolean team, String t, boolean m) {
 
         //System.out.println(colour);
         //System.out.println(team);
@@ -55,7 +55,7 @@ public class Piece {
     
     // returns a newly created exact duplicate of this object
     public Piece copy(){
-        Piece p = new Piece(this.colour,this.team,this.position,this.type,this.moved);
+        Piece p = new Piece(this.colour,this.team,this.type,this.moved);
         return p;
     }
     

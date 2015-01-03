@@ -298,7 +298,7 @@ public class Engine {
         //return new int[][]{{3,0}};
     }
     
-    public static Piece[][] makeMove(Move m){
+    public static Piece[][] getBoardAfterMove(Piece[][] b, Move m){
         // if piece has not been moved, it has now
         
         

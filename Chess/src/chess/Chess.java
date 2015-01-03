@@ -72,7 +72,7 @@ public class Chess {
                     String type = customBoard[y][x].piece.type;
                     boolean col = ("white" == customBoard[y][x].piece.colour);
                     boolean isHuman = (col == colour);
-                    currentState[y][x] = new Piece(col, isHuman, new int[]{y,x},type,false);
+                    currentState[y][x] = new Piece(col, isHuman, type, false);
                 }
             }
         }
@@ -93,40 +93,40 @@ public class Chess {
         // Opponent
         // Pawns
         for(int i=0;i<8;i++){
-            currentState[1][i] = new Piece(!c,false,new int[]{1,i},"pawn",false);
+            currentState[1][i] = new Piece(!c,false,"pawn",false);
         }
         //Rooks
-        currentState[0][0] = new Piece(!c,false,new int[]{0,0},"rook",false);
-        currentState[0][7] = new Piece(!c,false,new int[]{0,0},"rook",false);
+        currentState[0][0] = new Piece(!c,false,"rook",false);
+        currentState[0][7] = new Piece(!c,false,"rook",false);
         //Knights
-        currentState[0][1] = new Piece(!c,false,new int[]{0,0},"knight",false);
-        currentState[0][6] = new Piece(!c,false,new int[]{0,0},"knight",false);
+        currentState[0][1] = new Piece(!c,false,"knight",false);
+        currentState[0][6] = new Piece(!c,false,"knight",false);
         //Bishops
-        currentState[0][2] = new Piece(!c,false,new int[]{0,0},"bishop",false);
-        currentState[0][5] = new Piece(!c,false,new int[]{0,0},"bishop",false);
+        currentState[0][2] = new Piece(!c,false,"bishop",false);
+        currentState[0][5] = new Piece(!c,false,"bishop",false);
         //Queen
-        currentState[0][3] = new Piece(!c,false,new int[]{0,0},"queen",false);
+        currentState[0][3] = new Piece(!c,false,"queen",false);
         //King
-        currentState[0][4] = new Piece(!c,false,new int[]{0,0},"king",false);
+        currentState[0][4] = new Piece(!c,false,"king",false);
         
         //Player
         //Pawns
         for(int i=0;i<8;i++){
-            currentState[6][i] = new Piece(c,true,new int[]{1,i},"pawn",false);
+            currentState[6][i] = new Piece(c,true,"pawn",false);
         }
         //Rooks
-        currentState[7][0] = new Piece(c,true,new int[]{0,0},"rook",false);
-        currentState[7][7] = new Piece(c,true,new int[]{0,0},"rook",false);
+        currentState[7][0] = new Piece(c,true,"rook",false);
+        currentState[7][7] = new Piece(c,true,"rook",false);
         //Knights
-        currentState[7][1] = new Piece(c,true,new int[]{0,0},"knight",false);
-        currentState[7][6] = new Piece(c,true,new int[]{0,0},"knight",false);
+        currentState[7][1] = new Piece(c,true,"knight",false);
+        currentState[7][6] = new Piece(c,true,"knight",false);
         //Bishops
-        currentState[7][2] = new Piece(c,true,new int[]{0,0},"bishop",false);
-        currentState[7][5] = new Piece(c,true,new int[]{0,0},"bishop",false);
+        currentState[7][2] = new Piece(c,true,"bishop",false);
+        currentState[7][5] = new Piece(c,true,"bishop",false);
         //Queen
-        currentState[7][3] = new Piece(c,true,new int[]{0,0},"queen",false);
+        currentState[7][3] = new Piece(c,true,"queen",false);
         //King
-        currentState[7][4] = new Piece(c,true,new int[]{0,0},"king",false);
+        currentState[7][4] = new Piece(c,true,"king",false);
 
     }
     
