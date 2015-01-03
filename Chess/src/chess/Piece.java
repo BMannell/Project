@@ -16,16 +16,21 @@ import javax.swing.JLabel;
  */
 public class Piece {
 
-    boolean colour;
-    boolean team;
+    boolean colour; // colour of the piece 
+    boolean team; // whether owning player is human or AI
+    boolean moved; // whether the piece has moved or not
+    
     int[] position;
+    
     String type;
     public JLabel image;
     
-    public Piece(boolean colour, boolean team, int[] pos, String t) {
+    public Piece(boolean colour, boolean team, int[] pos, String t, boolean m) {
         this.team = team;
         position = pos;
         type = t;
+        moved = m; // whether the piece has been moved
+        
         String imagePath;
         if (colour) {
             imagePath = "/image/".concat(type + "-white.gif");
@@ -42,6 +47,13 @@ public class Piece {
         }
         image.setVisible(true);
     }
+    
+    // returns a newly created exact duplicate of this object
+    public Piece copy(){
+        Piece p = new Piece(this.colour,this.team,this.position,this.type,this.moved);
+        return p;
+    }
+    
     
     //stolen code need to find new way or cite
     public static BufferedImage resize(BufferedImage image, int width, int height) {
