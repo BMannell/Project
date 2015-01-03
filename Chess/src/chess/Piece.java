@@ -25,9 +25,14 @@ public class Piece {
     String type;
     public JLabel image;
     
+
     public Piece(boolean colour, boolean team, int[] pos, String t, boolean m) {
+
+        //System.out.println(colour);
+        //System.out.println(team);
+        //System.out.println(t);
+
         this.team = team;
-        position = pos;
         type = t;
         moved = m; // whether the piece has been moved
         

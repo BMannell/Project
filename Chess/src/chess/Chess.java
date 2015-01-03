@@ -13,19 +13,30 @@ public class Chess {
     boolean turn;       //whose turn it is
     public Piece[][] currentState = new Piece[8][8]; // the board
     Player player1;
-    Player player2;
+    AI ai;
     GUI gui;
     
     public Chess(){
-        initGameBoard(true);
         gui = new GUI(this);
-        gui.drawBoard();
+        //gui.displayMainMenu();
     }
     
-    public void playerColour(boolean c){
+    public void makeMove(Move move){
+        gui.lock();
         
+        //Engine.getGameBoard();
+        //Check game over
+        
+        gui.drawBoard();
+        System.out.println("MadeMove");
+        
+        //get ai turn 
+        //check gameover 
+        
+        gui.unlock();
     }
     
+    /*
     public void playGame() {
         boolean play;
         Move move;
@@ -44,7 +55,7 @@ public class Chess {
 
             turn = !turn;
         } while (play);
-    }
+    }*/
 
     public void checkStalemate() {
 
@@ -54,13 +65,31 @@ public class Chess {
 
     }
     
-    /**
+    public void initCustomGameBoard(CustomBoard.Square[][] customBoard, boolean colour){
+        for(int y = 0; y<8;y++){
+            for(int x =0; x<8;x++){
+                if(customBoard[y][x].piece != null){
+                    String type = customBoard[y][x].piece.type;
+                    boolean col = ("white" == customBoard[y][x].piece.colour);
+                    boolean isHuman = (col == colour);
+                    currentState[y][x] = new Piece(col, isHuman, new int[]{y,x},type,false);
+                }
+            }
+        }
+        gui.boardSetup();
+    }
+    
+    public void newGame(int ply, boolean colour){
+        initGameBoard(colour);
+        ai = new AI(ply);
+    }
+    /* initGameBoard
      * @param c
      * determines players team
      * true = white
      * false= black
-    */
-    void initGameBoard(boolean c){
+    */   
+    public void initGameBoard(boolean c){
         // Opponent
         // Pawns
         for(int i=0;i<8;i++){
@@ -98,6 +127,7 @@ public class Chess {
         currentState[7][3] = new Piece(c,true,new int[]{0,0},"queen",false);
         //King
         currentState[7][4] = new Piece(c,true,new int[]{0,0},"king",false);
+
     }
     
     
