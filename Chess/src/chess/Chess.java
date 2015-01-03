@@ -1,18 +1,10 @@
 package chess;
 
-import java.awt.BorderLayout;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 
-/**
- *
- * @author Ben
- */
 public class Chess {
 
     boolean turn;       //whose turn it is
     public Piece[][] currentState = new Piece[8][8]; // the board
-    Player player1;
     AI ai;
     GUI gui;
     
@@ -33,6 +25,7 @@ public class Chess {
         
         //get ai turn 
         //check gameover 
+        //gui.drawBoard();
         
         gui.unlock();
     }

@@ -1,30 +1,21 @@
 package chess;
 
-import java.awt.BorderLayout;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.border.TitledBorder;
@@ -217,7 +208,7 @@ public class GUI extends JFrame{
                     jp = new BoardSquare(Color.white, x, y);
                 }
                 else{
-                    jp = new BoardSquare(Color.black, x, y);
+                    jp = new BoardSquare(Color.GRAY, x, y);
                 }
                 board[y][x] = jp;
                 boardPane.add(jp);
@@ -232,6 +223,7 @@ public class GUI extends JFrame{
         for(int y = 0; y<8;y++){
             for(int x=0;x<8;x++){
                 board[y][x].removeAll();
+                board[y][x].piece = null;
                 if(chess.currentState[y][x] != null){
                     board[y][x].addPiece(chess.currentState[y][x]);
                 }
@@ -257,62 +249,95 @@ public class GUI extends JFrame{
     
     public void makeMove(BoardSquare bs){
         if(selectedPiece.piece.type.equalsIgnoreCase("pawn") && bs.Y == 0){
-            displayUpgradePiece();
+            getContentPane().add(new PawnPromotion(bs.X,bs.Y),0);
+            validate();
+            repaint();
+        }else{
+            chess.makeMove(new Move(selectedPiece.X,selectedPiece.Y,bs.X,bs.Y));
         }
     }
-    public void displayUpgradePiece(){
-        //pawn upgrade panel
-        JPanel pawnUp = new JPanel();
-        pawnUp.setLayout(new BoxLayout(pawnUp, BoxLayout.Y_AXIS));
-        pawnUp.setVisible(true);
-        pawnUp.setAlignmentX(Component.CENTER_ALIGNMENT);
-        Dimension newD = new Dimension(100,200);
-        pawnUp.setMaximumSize(newD);
-        pawnUp.setMinimumSize(newD);
-        pawnUp.setPreferredSize(newD);
-        //create border for radio colour select
-        TitledBorder title = BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(Color.BLACK), "Promotion");
-        title.setTitleJustification(TitledBorder.CENTER);
-        pawnUp.setBorder(title);
-
-        //create radio buttons
-        JRadioButton queenButton = new JRadioButton("Queen");
-        queenButton.setSelected(true);
-        queenButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        JRadioButton bishopButton = new JRadioButton("Bishop");
-        bishopButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        JRadioButton knightButton = new JRadioButton("Knight");
-        knightButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        JRadioButton rookButton = new JRadioButton("Rook");
-        rookButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        
-        //group radio buttons
-        ButtonGroup group = new ButtonGroup();
-        group.add(queenButton);
-        group.add(bishopButton);
-        group.add(knightButton);
-        group.add(rookButton);
-        
-        //add buttons to panel
-        pawnUp.add(queenButton);
-        pawnUp.add(bishopButton);
-        pawnUp.add(knightButton);
-        pawnUp.add(rookButton);
-        
-        //create continue button
-        JButton cont = new JButton("Select");
-        cont.setAlignmentX(Component.CENTER_ALIGNMENT);
-        cont.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                promotePawn()
-            }
-        });
-        pawnUp.add(Box.createRigidArea(new Dimension(0, 10)));
-        pawnUp.add(cont);
-        getContentPane().add(pawnUp, 0);
+    
+    public void promotePawn(String type, int x, int y){
+        selectedPiece.piece.promote(type);
+        getContentPane().remove(0);
+        chess.makeMove(new Move(selectedPiece.X,selectedPiece.Y,x,y));
         validate();
         repaint();
+    }
+    class PawnPromotion extends JPanel implements ActionListener {
+
+        String type = "queen";
+        int X,Y;
+        public PawnPromotion(int x, int y) {
+            X=x;
+            Y=y;
+            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+            setVisible(true);
+            setAlignmentX(Component.CENTER_ALIGNMENT);
+            //pawn upgrade panel
+            JPanel innerPanel = new JPanel();
+            innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.Y_AXIS));
+            innerPanel.setVisible(true);
+            innerPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+            Dimension newD = new Dimension(120, 180);
+            innerPanel.setMaximumSize(newD);
+            innerPanel.setMinimumSize(newD);
+            innerPanel.setPreferredSize(newD);
+            //create border for radio colour select
+            TitledBorder title = BorderFactory.createTitledBorder(
+                    BorderFactory.createLineBorder(Color.BLACK), "Promotion");
+            title.setTitleJustification(TitledBorder.CENTER);
+            innerPanel.setBorder(title);
+
+            //create radio buttons
+            JRadioButton queenButton = new JRadioButton("Queen");
+            queenButton.setActionCommand("queen");
+            queenButton.addActionListener(this);
+            queenButton.setSelected(true);
+            queenButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+            JRadioButton bishopButton = new JRadioButton("Bishop");
+            bishopButton.setActionCommand("bishop");
+            bishopButton.addActionListener(this);
+            bishopButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+            JRadioButton knightButton = new JRadioButton("Knight");
+            knightButton.setActionCommand("knight");
+            knightButton.addActionListener(this);
+            knightButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+            JRadioButton rookButton = new JRadioButton("Rook");
+            rookButton.setActionCommand("rook");
+            rookButton.addActionListener(this);
+            rookButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+            //group radio buttons
+            ButtonGroup group = new ButtonGroup();
+            group.add(queenButton);
+            group.add(bishopButton);
+            group.add(knightButton);
+            group.add(rookButton);
+
+            //add buttons to panel
+            innerPanel.add(queenButton);
+            innerPanel.add(bishopButton);
+            innerPanel.add(knightButton);
+            innerPanel.add(rookButton);
+
+            //create continue button
+            JButton cont = new JButton("Select");
+            cont.setAlignmentX(Component.CENTER_ALIGNMENT);
+            cont.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    promotePawn(type,X,Y);
+                }
+            });
+            innerPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+            innerPanel.add(cont);
+            add(innerPanel);
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            type = e.getActionCommand();
+        }
     }
     /* Initializes menu bar 
     private void initMenuBar(){
@@ -383,6 +408,7 @@ public class GUI extends JFrame{
             setBackground(Color.GREEN);
         }
         
+
         public void selectSquare() {
             if (piece != null && piece.team) {
                 cleanBoard();
