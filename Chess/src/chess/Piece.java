@@ -30,8 +30,7 @@ public class Piece {
         this.team = team;
         type = t;
         moved = m; // whether the piece has been moved
-        
-        String imagePath;
+                String imagePath;
         if (colour) {
             imagePath = "/image/".concat(type + "-white.gif");
         } else {
@@ -48,12 +47,26 @@ public class Piece {
         image.setVisible(true);
     }
     
+    public Piece(boolean colour, boolean team, String t, boolean m, boolean doesntMatter) {
+        this.colour = colour;
+        this.team = team;
+        type = t;
+        moved = m; // whether the piece has been moved
+    }
+    
     // returns a newly created exact duplicate of this object
     public Piece copy(){
         Piece p = new Piece(this.colour,this.team,this.type,this.moved);
         return p;
     }
     
+    //returns a piece without the image
+    public Piece copyAI(){
+        Piece p = new Piece(this.colour,this.team,this.type,this.moved, true);
+        return p;
+    }
+    
+    //changes a pawn to new piece
     public void promote(String type){
         this.type = type;
         String imagePath;
