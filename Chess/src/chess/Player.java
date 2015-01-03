@@ -1,14 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package chess;
 
-/**
- *
- * @author Ben
- */
 public class Player {
+    boolean isHuman;
+    GUI gui;
+    public Player(boolean type, GUI g){
+        isHuman = type;
+        gui = g;
+    }
     
+    public Move getMove(){
+        return new Move();
+    }
 }
