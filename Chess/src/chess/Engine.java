@@ -27,10 +27,10 @@ public class Engine {
                 if(state[y+(1*direction)][x] == null){ // if square ahead is empty
                     availMoves.add(new int[]{y+(1*direction),x});
                 }
-                if(state[y+(1*direction)][x-1] != null && state[y+(1*direction)][x-1].team != p.team){ // diagonally ahead to the left not empty and piece there is not same team
+                if((x-1 >= 0 && x-1 <= 7 && y+(1*direction) >= 0 && y+(1*direction) <= 7 ) && (state[y+(1*direction)][x-1] != null && state[y+(1*direction)][x-1].team != p.team)){ // diagonally ahead to the left not empty and piece there is not same team
                    availMoves.add(new int[]{y+(1*direction),x-1});
                 }
-                if(state[y+(1*direction)][x+1] != null && state[y+(1*direction)][x+1].team != p.team){ // diagonally ahead to the left not empty and piece there is not same team
+                if((x+1 >= 0 && x+1 <= 7 && y+(1*direction) >= 0 && y+(1*direction) <= 7 ) && (state[y+(1*direction)][x+1] != null && state[y+(1*direction)][x+1].team != p.team)){ // diagonally ahead to the left not empty and piece there is not same team
                    availMoves.add(new int[]{y+(1*direction),x+1});
                 }
                 
@@ -165,31 +165,31 @@ public class Engine {
                 
             case "knight":
                 
-                /*
-                if(state[y+1][x-2] == null || state[y+1][x-2].team != p.team){ // left 2 up 1
+                
+                if((x-2 >= 0 && x-2 <= 7 && y+1 >= 0 && y+1 <= 7 ) && (state[y+1][x-2] == null || state[y+1][x-2].team != p.team)){ // left 2 up 1
                         availMoves.add(new int[]{y+1,x-2});
                 }
-                if(state[y+2][x-1] == null || state[y+2][x-1].team != p.team){ // left 1 up 2
+                if((x-1 >= 0 && x-1 <= 7 && y+2 >= 0 && y+2 <= 7 ) && (state[y+2][x-1] == null || state[y+2][x-1].team != p.team)){ // left 1 up 2
                         availMoves.add(new int[]{y+2,x-1});
                 }
-                if(state[y+2][x+1] == null || state[y+2][x+1].team != p.team){ // right 1 up 2 
+                if((x+1 >= 0 && x+1 <= 7 && y+2 >= 0 && y+2 <= 7 ) && (state[y+2][x+1] == null || state[y+2][x+1].team != p.team)){ // right 1 up 2 
                         availMoves.add(new int[]{y+2,x+1});
                 }
-                if(state[y+1][x+2] == null || state[y+1][x+2].team != p.team){ // right 2 up 1
+                if((x+2 >= 0 && x+2 <= 7 && y+1 >= 0 && y+1 <= 7 ) && (state[y+1][x+2] == null || state[y+1][x+2].team != p.team)){ // right 2 up 1
                         availMoves.add(new int[]{y+1,x+2});
                 }
-                if(state[y-1][x+2] == null || state[y-1][x+2].team != p.team){ // right 2 down 1
+                if((x+2 >= 0 && x+2 <= 7 && y-1 >= 0 && y-1 <= 7 ) && (state[y-1][x+2] == null || state[y-1][x+2].team != p.team)){ // right 2 down 1
                         availMoves.add(new int[]{y-1,x+2});
                 }
-                if(state[y-2][x+1] == null || state[y-2][x+1].team != p.team){ // right 1 down 2
+                if((x+1 >= 0 && x+1 <= 7 && y-2 >= 0 && y-2 <= 7 ) && (state[y-2][x+1] == null || state[y-2][x+1].team != p.team)){ // right 1 down 2
                         availMoves.add(new int[]{y-2,x+1});
                 }
-                if(state[y-2][x-1] == null || state[y-2][x-1].team != p.team){ // left 1 down 2
+                if((x-1 >= 0 && x-1 <= 7 && y-2 >= 0 && y-2 <= 7 ) && (state[y-2][x-1] == null || state[y-2][x-1].team != p.team)){ // left 1 down 2
                         availMoves.add(new int[]{y-2,x-1});
                 }
-                if(state[y-1][x-2] == null || state[y-1][x-2].team != p.team){ // left 2 down 1
+                if((x-2 >= 0 && x-2 <= 7 && y-1 >= 0 && y-1 <= 7 ) && (state[y-1][x-2] == null || state[y-1][x-2].team != p.team)){ // left 2 down 1
                         availMoves.add(new int[]{y-1,x-2});
-                }*/
+                }
                 
                 break;
                 
@@ -319,28 +319,28 @@ public class Engine {
             case "king":
                 // check the immediate squares around the king
                 
-                if(state[y][x-1] == null || state[y][x-1].team != p.team){ // to the left
+                if((x-1 >= 0 && x-1 <= 7 && y >= 0 && y <= 7 ) && (state[y][x-1] == null || state[y][x-1].team != p.team)){ // to the left
                     availMoves.add(new int[]{x-1,y});
                 }
-                else if(state[y+1][x-1] == null || state[y+1][x-1].team != p.team){ // up and to the left
+                else if((x-1 >= 0 && x-1 <= 7 && y+1 >= 0 && y+1 <= 7 ) && (state[y+1][x-1] == null || state[y+1][x-1].team != p.team)){ // up and to the left
                     availMoves.add(new int[]{x-1,y+1});
                 }
-                if(state[y+1][x] == null || state[y+1][x].team != p.team){ // up
+                if((x >= 0 && x <= 7 && y+1 >= 0 && y+1 <= 7 ) && (state[y+1][x] == null || state[y+1][x].team != p.team)){ // up
                     availMoves.add(new int[]{x,y+1});
                 }
-                if(state[y+1][x+1] == null || state[y+1][x+1].team != p.team){ // up and to the right
+                if((x+1 >= 0 && x+1 <= 7 && y+1 >= 0 && y+1 <= 7 ) && (state[y+1][x+1] == null || state[y+1][x+1].team != p.team)){ // up and to the right
                     availMoves.add(new int[]{x+1,y+1});
                 }
-                if(state[y][x+1] == null || state[y][x+1].team != p.team){ // to the right
+                if((x+1 >= 0 && x+1 <= 7 && y >= 0 && y <= 7 ) && (state[y][x+1] == null || state[y][x+1].team != p.team)){ // to the right
                     availMoves.add(new int[]{x+1,y});
                 }
-                if(state[y-1][x+1] == null || state[y-1][x+1].team != p.team){ // down and to the right
+                if((x+1 >= 0 && x+1 <= 7 && y-1 >= 0 && y-1 <= 7 ) && (state[y-1][x+1] == null || state[y-1][x+1].team != p.team)){ // down and to the right
                     availMoves.add(new int[]{x+1,y-1});
                 }
-                if(state[y-1][x] == null || state[y-1][x].team != p.team){ // down
+                if((x >= 0 && x <= 7 && y-1 >= 0 && y-1 <= 7 ) && (state[y-1][x] == null || state[y-1][x].team != p.team)){ // down
                     availMoves.add(new int[]{x,y-1});
                 }
-                if(state[y-1][x-1] == null || state[y-1][x-1].team != p.team){ // down and to the left
+                if((x-1 >= 0 && x-1 <= 7 && y-1 >= 0 && y-1 <= 7 ) && (state[y-1][x-1] == null || state[y-1][x-1].team != p.team)){ // down and to the left
                     availMoves.add(new int[]{x-1,y-1});
                 }
                 

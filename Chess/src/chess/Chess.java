@@ -24,7 +24,8 @@ public class Chess {
     public void makeMove(Move move){
         gui.lock();
         
-        //Engine.getGameBoard();
+        currentState = Engine.getBoardAfterMove(currentState, move);
+        
         //Check game over
         
         gui.drawBoard();
@@ -56,7 +57,7 @@ public class Chess {
             turn = !turn;
         } while (play);
     }*/
-
+    
     public void checkStalemate() {
 
     }
