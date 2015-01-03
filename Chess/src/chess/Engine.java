@@ -16,13 +16,14 @@ public class Engine {
                 int direction; // up or down depending on team. Applied to any vertical positioning. only matters for pawn
         
                 if(p.team){ // assuming true means white
-                    direction = 1; // up (y + movement*1 is upward movement)
+                    direction = -1; // up (y + movement*-1 is upward movement)
                 }
                 else{
-                    direction = -1; // down (y + movement*-1 is downward movement)
+                    direction = 1; // down (y + movement*1 is downward movement)
                 }
 
                 
+
                 if(state[y+(1*direction)][x] == null){ // if square ahead is empty
                     availMoves.add(new int[]{y+(1*direction),x});
                 }
@@ -163,6 +164,8 @@ public class Engine {
                 
                 
             case "knight":
+                
+                /*
                 if(state[y+1][x-2] == null || state[y+1][x-2].team != p.team){ // left 2 up 1
                         availMoves.add(new int[]{y+1,x-2});
                 }
@@ -186,7 +189,7 @@ public class Engine {
                 }
                 if(state[y-1][x-2] == null || state[y-1][x-2].team != p.team){ // left 2 down 1
                         availMoves.add(new int[]{y-1,x-2});
-                }
+                }*/
                 
                 break;
                 

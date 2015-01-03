@@ -31,7 +31,8 @@ public class Piece {
         //System.out.println(colour);
         //System.out.println(team);
         //System.out.println(t);
-
+        
+        this.colour= colour;
         this.team = team;
         type = t;
         moved = m; // whether the piece has been moved

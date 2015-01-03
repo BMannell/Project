@@ -242,7 +242,6 @@ public class CustomBoard extends JPanel{
             setBorder(BorderFactory.createLineBorder(Color.black));
             addMouseListener(new java.awt.event.MouseAdapter() {
                 public void mouseClicked(java.awt.event.MouseEvent evt) {
-                    System.out.println("clicked");
                     if(piece != null && isBoard && removePiece){
                         removePiece();
                         revokePiece();
