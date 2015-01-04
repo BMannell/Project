@@ -305,7 +305,7 @@ public class GUI extends JFrame{
         cont.setAlignmentX(Component.CENTER_ALIGNMENT);
         cont.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                promotePawn()
+                //promotePawn();
             }
         });
         pawnUp.add(Box.createRigidArea(new Dimension(0, 10)));
