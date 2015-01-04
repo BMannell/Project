@@ -361,6 +361,22 @@ public class GUI extends JFrame{
     }
     */
     
+    /*
+    public void showPaths(){
+        for(int y = 0; y < 8; y++){
+            for (int x= 0; x < 8; x++) {
+                if (board[y][x].piece != null && !board[y][x].piece.team) {
+                    ArrayList<int[]> moves = Engine.getMoves(chess.currentState, y, x);
+                    moves.add(0,new int[]{y,x});
+                    ArrayList<int[]> coords = Engine.getRouteToKing(moves, board[y][x].piece.type, new int[]{5,5});
+                    for(int[] num: coords){
+                        board[num[0]][num[1]].setRed();
+                    }
+                }
+            }
+        }
+    }
+    */
     /**
      * BoardSquare
      * 
@@ -386,7 +402,8 @@ public class GUI extends JFrame{
             setBackground(bg);
             addMouseListener(new java.awt.event.MouseAdapter() {
                 public void mouseClicked(java.awt.event.MouseEvent evt) {
-                    selectSquare();
+                    //showPaths();
+                  selectSquare();
                 }
             });
             setSize(64, 64);
@@ -419,7 +436,6 @@ public class GUI extends JFrame{
                     selectedPiece = this;
                     setBlue();
                     ArrayList<int[]> moves = Engine.getMoves(chess.currentState, Y, X);
-                    System.out.println("Got it" + moves.size());
                     for (int[] move : moves) {
                         board[move[0]][move[1]].setToMove();
                     }

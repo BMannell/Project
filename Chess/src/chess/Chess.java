@@ -18,7 +18,7 @@ public class Chess {
         
         currentState = Engine.getBoardAfterMove(currentState, move);
         
-        switch(Engine.checkCheck(currentState, true)){
+        switch(Engine.stateCheck(currentState, true)){
             case 0:
                 System.out.println("All-clear!");
                 break;
