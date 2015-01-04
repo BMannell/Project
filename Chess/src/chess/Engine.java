@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Engine {
    
-    public static ArrayList<int[]> getMoves(Piece[][] state,int y, int x){
+    public ArrayList<int[]> getMoves(Piece[][] state,int y, int x){
         
         ArrayList<int[]> availMoves = new ArrayList<int[]>();
         Piece p = state[y][x]; // pointer to the piece needing moves
@@ -355,7 +355,7 @@ public class Engine {
         //return new int[][]{{3,0}};
     }
     
-    public static Piece[][] getBoardAfterMove(Piece[][] b, Move m){
+    public Piece[][] getBoardAfterMove(Piece[][] b, Move m){
         // if piece has not been moved, it has now
         Piece[][] result = new Piece[8][8];
         
