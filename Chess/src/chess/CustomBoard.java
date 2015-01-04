@@ -1,6 +1,6 @@
 package chess;
 
-import static chess.Piece.resize;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -9,8 +9,6 @@ import java.awt.GridLayout;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -59,7 +57,7 @@ public class CustomBoard extends JPanel{
                     jp = new Square(Color.white, x, y);
                 }
                 else{
-                    jp = new Square(Color.black, x, y);
+                    jp = new Square(Color.GRAY, x, y);
                 }
                 board[y][x] = jp;
                 boardPane.add(jp);
@@ -239,7 +237,7 @@ public class CustomBoard extends JPanel{
         public void init(){
             setVisible(true);
             setSize(64, 64);
-            setBorder(BorderFactory.createLineBorder(Color.black));
+            setBorder(BorderFactory.createLineBorder(Color.black,2));
             addMouseListener(new java.awt.event.MouseAdapter() {
                 public void mouseClicked(java.awt.event.MouseEvent evt) {
                     if(piece != null && isBoard && removePiece){
@@ -269,7 +267,7 @@ public class CustomBoard extends JPanel{
         
         public void deselectPiece(){
             selectedPiece =null;
-            setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
         }
         
         public void revokePiece(){

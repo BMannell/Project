@@ -362,13 +362,15 @@ public class Engine {
         // copy board state
         for(int i = 0; i < 8; i++){
             for(int j = 0; j < 8; j++){
-                result[i][j] = b[i][j].copy();
+                if (b[i][j] != null) {
+                    result[i][j] = b[i][j].copy();
+                }
             }
         }
         
         // make move on the result board
-        result[m.newX][m.newY] = result[m.oldX][m.oldY]; // make the destination space the moved piece
-        result[m.oldX][m.oldY] = null; // remove pointer reference for old spot
+        result[m.newY][m.newX] = result[m.oldY][m.oldX]; // make the destination space the moved piece
+        result[m.oldY][m.oldX] = null; // remove pointer reference for old spot
         
         return result;
     }
