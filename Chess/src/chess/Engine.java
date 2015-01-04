@@ -378,4 +378,61 @@ public class Engine {
     public static boolean stateCheck(Piece[][] p){
         return true;
     }
+    
+    //check if a player has been checked or checkmated
+    public static boolean checkCheck(Piece[][] state, boolean team){
+        boolean isChecked = false;
+        int[] goodKingLeo = new int[]{0,0};
+        ArrayList<int[]> availEnemyMoves = new ArrayList();
+        ArrayList<int[]> availFriendlyMoves = new ArrayList();
+        for(int y = 0; y <8; y++){  //loop through every square on board to get pieces
+            for(int x = 0; x<8; x++){
+                if(state[y][x] != null){    //if there's a piece there
+                    if(state[y][x].team == team){ //friendly units
+                        ArrayList<int[]> moves = getMoves(state, y, x); //get moves of current piece
+                        for(int[] newMove: moves){  //loop through new moves
+                            boolean alreadyIn = false; //if move is already in 
+                            for(int[] oldMove: availFriendlyMoves){ //loop through old moves
+                                if(newMove == oldMove){ //check if moves of already there
+                                    alreadyIn = true;   //change inAlready boolean
+                                    break;              //move onto next piece
+                                }
+                            }
+                            if(!alreadyIn){ //if move does not exist add it
+                                availFriendlyMoves.add(newMove);
+                            }
+                        }
+                        //availFriendlyMoves.addAll(getMoves(state, y, y));
+                        if(state[y][x].type.equalsIgnoreCase("king")){
+                            System.out.println("Found the king!");
+                            goodKingLeo = new int[]{y,x};
+                        }
+                    }else{
+                        ArrayList<int[]> moves = getMoves(state, y, x); //get moves of current piece
+                        for(int[] newMove: moves){  //loop through new moves
+                            boolean alreadyIn = false;  //if moveis already in list
+                            for(int[] oldMove: availEnemyMoves){ //check
+                                if(newMove == oldMove){ //check if same
+                                    alreadyIn = true; //move is already in list
+                                    break;  //break and move onto next move
+                                }
+                            }
+                            if(!alreadyIn){
+                                availEnemyMoves.add(newMove);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        boolean contain =false;
+        for(int[] move: availEnemyMoves){
+            if(move[0] == goodKingLeo[0] && move[1] == goodKingLeo[1]){
+                contain = true;
+                break;
+            }
+        }
+        return contain;
+    }
+    
 }

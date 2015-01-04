@@ -18,7 +18,9 @@ public class Chess {
         
         currentState = Engine.getBoardAfterMove(currentState, move);
         
-        //Check game over
+        if(Engine.checkCheck(currentState, true)){
+            System.out.println("Checked!");
+        }
         
         gui.drawBoard();
         System.out.println("MadeMove");
