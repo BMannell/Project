@@ -264,6 +264,7 @@ public class GUI extends JFrame{
         validate();
         repaint();
     }
+    
     class PawnPromotion extends JPanel implements ActionListener {
 
         String type = "queen";

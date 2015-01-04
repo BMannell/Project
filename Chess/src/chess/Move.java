@@ -12,8 +12,8 @@ public class Move {
     public Move(){
         
     }
-    public Move(int oX, int oY, int nX, int nY) {
-
+    
+    public Move(int oY, int oX, int nY, int nX){
         this.oldX = oX;
         this.oldY = oY;
 

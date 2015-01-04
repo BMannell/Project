@@ -6,6 +6,8 @@
 
 package chess;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Dylan
@@ -13,10 +15,14 @@ package chess;
 public class Node {
     
     Piece[][] boardState; // board state for the node
-    float fitness; // evaluated fitness of this board
+    ArrayList<Node> children; // list of child nodes
+    double fitness; // evaluated fitness of this board
     
-    public Node(Piece[][] b, float f){
-        fitness = f;
+    
+    
+    public Node(Piece[][] b, double f){
+        children = null; // initialize as empty
+        fitness = f; // set fitness
         
         // copy board state of parameter board
         for(int i = 0; i < 8; i++){
