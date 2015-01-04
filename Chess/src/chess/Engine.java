@@ -380,32 +380,43 @@ public class Engine {
     }
     
     //check if a player has been checked or checkmated
-    public static boolean checkCheck(Piece[][] state, boolean team){
-        boolean isChecked = false;
-        int[] goodKingLeo = new int[]{0,0};
+    public static int checkCheck(Piece[][] state, boolean team){
+        int level = 0;
+        
+        ArrayList<int[]> enemyPositions = new ArrayList();
         ArrayList<int[]> availEnemyMoves = new ArrayList();
+        
+        
         ArrayList<int[]> availFriendlyMoves = new ArrayList();
+        
+        int[] goodKingLeo = new int[]{0,0};
+        ArrayList<int[]> availKingMoves = new ArrayList();
+        
+        /* Check */
+        
+        
         for(int y = 0; y <8; y++){  //loop through every square on board to get pieces
             for(int x = 0; x<8; x++){
                 if(state[y][x] != null){    //if there's a piece there
                     if(state[y][x].team == team){ //friendly units
-                        ArrayList<int[]> moves = getMoves(state, y, x); //get moves of current piece
-                        for(int[] newMove: moves){  //loop through new moves
-                            boolean alreadyIn = false; //if move is already in 
-                            for(int[] oldMove: availFriendlyMoves){ //loop through old moves
-                                if(newMove == oldMove){ //check if moves of already there
-                                    alreadyIn = true;   //change inAlready boolean
-                                    break;              //move onto next piece
+                        if (state[y][x].type.equalsIgnoreCase("king")) {    //if the unit is the good king
+                            System.out.println("Found the king!");
+                            goodKingLeo = new int[]{y, x};
+                            availKingMoves = getMoves(state,y,x);
+                        } else {
+                            ArrayList<int[]> moves = getMoves(state, y, x); //get moves of current piece
+                            for (int[] newMove : moves) {  //loop through new moves
+                                boolean alreadyIn = false; //if move is already in 
+                                for (int[] oldMove : availFriendlyMoves) { //loop through old moves
+                                    if (newMove == oldMove) { //check if moves of already there
+                                        alreadyIn = true;   //change inAlready boolean
+                                        break;              //move onto next piece
+                                    }
+                                }
+                                if (!alreadyIn) { //if move does not exist add it
+                                    availFriendlyMoves.add(newMove);
                                 }
                             }
-                            if(!alreadyIn){ //if move does not exist add it
-                                availFriendlyMoves.add(newMove);
-                            }
-                        }
-                        //availFriendlyMoves.addAll(getMoves(state, y, y));
-                        if(state[y][x].type.equalsIgnoreCase("king")){
-                            System.out.println("Found the king!");
-                            goodKingLeo = new int[]{y,x};
                         }
                     }else{
                         ArrayList<int[]> moves = getMoves(state, y, x); //get moves of current piece
@@ -425,14 +436,17 @@ public class Engine {
                 }
             }
         }
-        boolean contain =false;
+        
         for(int[] move: availEnemyMoves){
             if(move[0] == goodKingLeo[0] && move[1] == goodKingLeo[1]){
-                contain = true;
+                level = 1;
                 break;
             }
         }
-        return contain;
+        
+        /* Checkmate */
+        
+        return level;
     }
     
 }

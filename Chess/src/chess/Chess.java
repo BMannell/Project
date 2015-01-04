@@ -18,8 +18,16 @@ public class Chess {
         
         currentState = Engine.getBoardAfterMove(currentState, move);
         
-        if(Engine.checkCheck(currentState, true)){
-            System.out.println("Checked!");
+        switch(Engine.checkCheck(currentState, true)){
+            case 0:
+                System.out.println("All-clear!");
+                break;
+            case 1:
+                System.out.println("Checked!");
+                break;
+            case 2:
+                System.out.println("Checkmate!");
+                break;
         }
         
         gui.drawBoard();
