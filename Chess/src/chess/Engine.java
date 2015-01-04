@@ -105,7 +105,7 @@ public class Engine {
                 // check all diagonal directions
                 
                 // to the bottom left edge of the board
-                for(int iX = x-1, iY = y-1; iX >= 0 && iY >= 0; iX--, iY--){
+                for(int iX = x-1, iY = y-1; iX >= 0 && iY <= 7 && iY >= 0 && iX <= 7; iX--, iY--){
                     if(state[iY][iX] == null){ // if nothing there
                         availMoves.add(new int[]{iY,iX});
                     }
@@ -119,7 +119,7 @@ public class Engine {
                 }
                 
                 // to the top left edge of the board
-                for(int iX = x-1, iY = y+1; iX >= 0 && iY <= 7; iX--, iY++){
+                for(int iX = x-1, iY = y+1; iX >= 0 && iY <= 7 && iY >= 0 && iX <= 7; iX--, iY++){
                     if(state[iY][iX] == null){ // if nothing there
                         availMoves.add(new int[]{iY,iX});
                     }
@@ -133,7 +133,7 @@ public class Engine {
                 }
                 
                 // to the top right edge of the board
-                for(int iX = x+1, iY = y+1; iX <= 7 && iY <= 7; iX++, iY++){
+                for(int iX = x+1, iY = y+1; iX >= 0 && iY <= 7 && iY >= 0 && iX <= 7; iX++, iY++){
                     if(state[iY][iX] == null){ // if nothing there
                         availMoves.add(new int[]{iY,iX});
                     }
@@ -147,7 +147,7 @@ public class Engine {
                 }
                 
                 // to the bottom right edge of the board
-                for(int iX = x+1, iY = y-1; iX >= 0 && iY <= 7; iX++, iY--){
+                for(int iX = x+1, iY = y-1; iX >= 0 && iY <= 7 && iY >= 0 && iX <= 7; iX++, iY--){
                     if(state[iY][iX] == null){ // if nothing there
                         availMoves.add(new int[]{iY,iX});
                     }
@@ -258,7 +258,7 @@ public class Engine {
                 // --------- from bishop -------------
                 
                 // to the bottom left edge of the board
-                for(int iX = x-1, iY = y-1; iX >= 0 && iY >= 0; iX--, iY--){
+                for(int iX = x-1, iY = y-1; iX >= 0 && iY <= 7 && iY >= 0 && iX <= 7; iX--, iY--){
                     if(state[iY][iX] == null){ // if nothing there
                         availMoves.add(new int[]{iY,iX});
                     }
@@ -272,7 +272,7 @@ public class Engine {
                 }
                 
                 // to the top left edge of the board
-                for(int iX = x-1, iY = y+1; iX >= 0 && iY <= 7; iX--, iY++){
+                for(int iX = x-1, iY = y+1; iX >= 0 && iY <= 7 && iY >= 0 && iX <= 7; iX--, iY++){
                     if(state[iY][iX] == null){ // if nothing there
                         availMoves.add(new int[]{iY,iX});
                     }
@@ -286,7 +286,7 @@ public class Engine {
                 }
                 
                 // to the top right edge of the board
-                for(int iX = x+1, iY = y+1; iX <= 7 && iY <= 7; iX++, iY++){
+                for(int iX = x+1, iY = y+1; iX >= 0 && iY <= 7 && iY >= 0 && iX <= 7; iX++, iY++){
                     if(state[iY][iX] == null){ // if nothing there
                         availMoves.add(new int[]{iY,iX});
                     }
@@ -300,7 +300,7 @@ public class Engine {
                 }
                 
                 // to the bottom right edge of the board
-                for(int iX = x+1, iY = y-1; iX >= 0 && iY <= 7; iX++, iY--){
+                for(int iX = x+1, iY = y-1; iX >= 0 && iY <= 7 && iY >= 0 && iX <= 7; iX++, iY--){
                     if(state[iY][iX] == null){ // if nothing there
                         availMoves.add(new int[]{iY,iX});
                     }
@@ -320,28 +320,28 @@ public class Engine {
                 // check the immediate squares around the king
                 
                 if((x-1 >= 0 && x-1 <= 7 && y >= 0 && y <= 7 ) && (state[y][x-1] == null || state[y][x-1].team != p.team)){ // to the left
-                    availMoves.add(new int[]{x-1,y});
+                    availMoves.add(new int[]{y,x-1});
                 }
                 else if((x-1 >= 0 && x-1 <= 7 && y+1 >= 0 && y+1 <= 7 ) && (state[y+1][x-1] == null || state[y+1][x-1].team != p.team)){ // up and to the left
-                    availMoves.add(new int[]{x-1,y+1});
+                    availMoves.add(new int[]{y+1,x-1});
                 }
                 if((x >= 0 && x <= 7 && y+1 >= 0 && y+1 <= 7 ) && (state[y+1][x] == null || state[y+1][x].team != p.team)){ // up
-                    availMoves.add(new int[]{x,y+1});
+                    availMoves.add(new int[]{y+1,x});
                 }
                 if((x+1 >= 0 && x+1 <= 7 && y+1 >= 0 && y+1 <= 7 ) && (state[y+1][x+1] == null || state[y+1][x+1].team != p.team)){ // up and to the right
-                    availMoves.add(new int[]{x+1,y+1});
+                    availMoves.add(new int[]{y+1,x+1});
                 }
                 if((x+1 >= 0 && x+1 <= 7 && y >= 0 && y <= 7 ) && (state[y][x+1] == null || state[y][x+1].team != p.team)){ // to the right
-                    availMoves.add(new int[]{x+1,y});
+                    availMoves.add(new int[]{y,x+1});
                 }
                 if((x+1 >= 0 && x+1 <= 7 && y-1 >= 0 && y-1 <= 7 ) && (state[y-1][x+1] == null || state[y-1][x+1].team != p.team)){ // down and to the right
-                    availMoves.add(new int[]{x+1,y-1});
+                    availMoves.add(new int[]{y-1,x+1});
                 }
                 if((x >= 0 && x <= 7 && y-1 >= 0 && y-1 <= 7 ) && (state[y-1][x] == null || state[y-1][x].team != p.team)){ // down
-                    availMoves.add(new int[]{x,y-1});
+                    availMoves.add(new int[]{y-1,x});
                 }
                 if((x-1 >= 0 && x-1 <= 7 && y-1 >= 0 && y-1 <= 7 ) && (state[y-1][x-1] == null || state[y-1][x-1].team != p.team)){ // down and to the left
-                    availMoves.add(new int[]{x-1,y-1});
+                    availMoves.add(new int[]{y-1,x-1});
                 }
                 
                 /* Requires castling check still */
@@ -375,7 +375,199 @@ public class Engine {
         return result;
     }
     
-    public static boolean stateCheck(Piece[][] p){
-        return true;
+    //check if a player has been checked or checkmated
+    public static int stateCheck(Piece[][] state, boolean team){
+        int level = 0;
+        
+        ArrayList<int[]> enemyPositions = new ArrayList();
+        ArrayList<int[]> availEnemyMoves = new ArrayList();
+        ArrayList<ArrayList> enemyRoutes = new ArrayList();
+        
+        ArrayList<int[]> availFriendlyMoves = new ArrayList();
+        
+        int[] goodKingLeo = new int[]{0,0};
+        ArrayList<int[]> availKingMoves = new ArrayList();
+        
+        /* Check */
+        
+        //find king
+        for (int y = 0; y < 8; y++) {  //loop through every square on board to get pieces
+            for (int x = 0; x < 8; x++) {
+                if (state[y][x] != null && state[y][x].team == team && state[y][x].type.equals("king")) {    //if the unit is the good king
+                    System.out.println("Found the king!");
+                    goodKingLeo = new int[]{y, x};
+                    availKingMoves = getMoves(state, y, x);
+                    System.out.println(availKingMoves.size());
+                }
+            }
+        }
+        
+        for(int y = 0; y <8; y++){  //loop through every square on board to get pieces
+            for(int x = 0; x<8; x++){
+                if(state[y][x] != null){    //if there's a piece there
+                    if(state[y][x].team == team){ //friendly units
+                        ArrayList<int[]> moves = getMoves(state, y, x); //get moves of current piece
+                        for (int[] newMove : moves) {  //loop through new moves
+                            boolean alreadyIn = false; //if move is already in 
+                            for (int[] oldMove : availFriendlyMoves) { //loop through old moves
+                                if (newMove == oldMove) { //check if moves of already there
+                                    alreadyIn = true;   //change inAlready boolean
+                                    break;              //move onto next piece
+                                }
+                            }
+                            if (!alreadyIn) { //if move does not exist add it
+                                availFriendlyMoves.add(newMove);
+                            }
+                        }
+                    }else{
+                        System.out.println("adding enemy moves");
+                        ArrayList<int[]> moves = getMoves(state, y, x); //get moves of current piece
+                        for(int[] newMove: moves){
+                            boolean add = true;
+                            for(int[] oldMove: availEnemyMoves){
+                                if(newMove == oldMove){
+                                    add = false;
+                                    break;
+                                }
+                            }
+                            if(add){
+                                availEnemyMoves.add(newMove);
+                            }
+                        }
+                        
+                        if(moveListContains(moves, goodKingLeo)){   //if the piece is checking king add it to the list
+                            System.out.println("adding kill route");
+                            moves.add(0, new int[]{y, x});
+                            ArrayList routes = getRouteToKing(moves, state[y][x].type, goodKingLeo);
+                            enemyRoutes.add(routes);
+                            level = 1;
+                        }
+                    }
+                }
+            }
+        }
+        
+        if(level == 1){
+           
+            // check if king can move
+            boolean canMove = false;
+            //for(int[] aem: availEnemyMoves){
+            //    System.out.println(aem[0] + ":" + aem[1]);
+            //}
+            
+            for(int[] kMove: availKingMoves){
+                if(!moveListContains(availEnemyMoves, kMove)){
+                    canMove = true;
+                    break;
+                }
+            }
+            if(!canMove){ //if it cant move 
+                if(enemyRoutes.size() >= 2){ //there are more than 2 pieces attacking -- checkmate
+                    level = 2;
+                }else{  //if a allied piece can take out or block
+                    boolean canBlock = false;
+                    ArrayList<int []> route = enemyRoutes.get(0);
+                    for(int[] move: route){
+                        if(moveListContains(availFriendlyMoves,move)){
+                            canBlock = true;
+                            break;
+                        }
+                    }
+                    if(!canBlock){
+                        level = 2;
+                    }
+                }
+            }
+        }
+        
+        /* Checkmate */
+        
+        return level;
+    }
+    private static boolean moveListContains(ArrayList<int[]> moves, int[] pos){
+        boolean result = false;
+        for(int[] move: moves){
+            if(move[0] == pos[0] && move[1] == pos[1]){
+                result = true;
+                break;
+            }
+        }
+        return result;
+    }
+    
+    //get routes of all pieces that can attack king
+    private static ArrayList<int[]> getRouteToKing(ArrayList<int[]> moves, String type, int[] king){
+        ArrayList<int[]> route = new ArrayList();
+        int[] origin = moves.get(0);
+        route.add(origin);
+           
+        if (!type.equals("pawn") && !type.equals("knight")) {
+            //if attacking along horizontal
+            if (origin[0] == king[0]) {
+                if (origin[1] < king[1]) {    //if rook is left
+                    for (int[] move : moves) {
+                        if (move[1] < king[1] && move[0] == king[0]) {
+                            route.add(move);    //add all mvoes leading to king
+                        }
+                    }
+                } else {  //if rook is right
+                    for (int[] move : moves) {
+                        if (move[1] > king[1] && move[0] == king[0]) {
+                            route.add(move);    //add all moves leading to king
+                        }
+                    }
+                }
+            } else if (origin[1] == king[1]) {  //if rook is attacking from vertical
+                if (origin[0] < king[0]) {    //if rook is above
+                    for (int[] move : moves) {
+                        if (move[0] < king[0] && move[1] == king[1]) {
+                            route.add(move);    //add all mvoes leading to king
+                        }
+                    }
+                } else {  //if rook is below
+                    for (int[] move : moves) {
+                        if (move[0] > king[0] && move[1] == king[1]) {
+                            route.add(move);    //add all moves leading to king
+                        }
+                    }
+                }
+            } else if (origin[0] < king[0]) { //attacking diagonal from above
+                int temp_x= origin[1];
+                int temp_y=origin[0];
+                if(origin[1] < king[1]){ //from upper left
+                    temp_x++;
+                    temp_y++;
+                    do{
+                        route.add(new int[]{temp_y++, temp_x++});
+                    }while(temp_x != king[1] && temp_y != king[0]);
+                    
+                }else{  //from upper right
+                    temp_x--;
+                    temp_y++;
+                    do{
+                        route.add(new int[]{temp_y++, temp_x--});
+                    }while(temp_x != king[1] && temp_y != king[0]);
+                }
+            }else{
+                
+                int temp_x= origin[1];
+                int temp_y=origin[0];
+                if(origin[1] < king[1]){ //from lower left
+                    temp_x++;
+                    temp_y--;
+                    do{
+                        route.add(new int[]{temp_y--, temp_x++});
+                    }while(temp_x != king[1] && temp_y != king[0]);
+                    
+                }else{  //from lower right
+                    temp_x--;
+                    temp_y--;
+                    do{
+                        route.add(new int[]{temp_y--, temp_x--});
+                    }while(temp_x != king[1] && temp_y != king[0]);
+                }
+            }
+        }
+        return route;
     }
 }
