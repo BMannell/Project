@@ -6,13 +6,11 @@ import java.util.ArrayList;
 public class AI {
     int ply; // number of plys to consider
     Node minimax; // minimax tree head pointer
-    Engine brain; // does a lot of the thinking for the AI
     
     
     public AI(int p){
         minimax = null; // set to null
         ply = p; // set number of plys to use
-        brain = new Engine(); // initialize the engine
     }
     
     
@@ -37,23 +35,23 @@ public class AI {
         if(argPly == this.ply){
             return;
         }
-        ArrayList<int[]> pieces = brain.getPieces(cur.boardState, t);
+        ArrayList<int[]> pieces = Engine.getPieces(cur.boardState, t);
         ArrayList<int[]> newPlacements; // the list of potential places to move a piece 
         Piece[][] boardFromMove = null; // board that results from executing a move
         boolean checked = false;
         
         for(int i = 0; i < pieces.size(); i++){ // for each piece owned on the board
-            if(brain.stateCheck(cur.boardState,t) != 0){
+            if(Engine.stateCheck(cur.boardState,t) != 0){
                 checked = true;
             }
             else{
                 checked = false;
             }
-            newPlacements = brain.getMoves(cur.boardState, pieces.get(i)[0],pieces.get(i)[1],t,checked); // get moves for the current piece
+            newPlacements = Engine.getMoves(cur.boardState, pieces.get(i)[0],pieces.get(i)[1]); // get moves for the current piece
             
             for(int j = 0; j < newPlacements.size(); j++){ // fir each of the new possible placements of this piece
                 // get the resulting board state
-                boardFromMove = brain.getBoardAfterMove(cur.boardState, new Move(pieces.get(i)[0], pieces.get(i)[1], newPlacements.get(j)[0], newPlacements.get(j)[1]));
+                boardFromMove = Engine.getBoardAfterMove(cur.boardState, new Move(pieces.get(i)[0], pieces.get(i)[1], newPlacements.get(j)[0], newPlacements.get(j)[1]));
                 
                 // and add it as a node to the current nodes list of children
                 cur.children.add(new Node(boardFromMove, fitnessEvaluation(boardFromMove))); // get boardState after making the move
@@ -85,7 +83,7 @@ public class AI {
     
     
     
-    
+    /*
     private int alphaBetaMax( int alpha, int beta, int depthleft ) {
         if ( depthleft == 0 ){
             return evaluate();
@@ -113,7 +111,7 @@ public class AI {
      }
     
      
-     
+     */
      
      
     

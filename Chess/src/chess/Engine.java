@@ -6,7 +6,7 @@ public class Engine {
    
     // fetches a list of which pieces on the board belong to the player specified
     // (used to know which pieces to make successors from)
-    public ArrayList<int[]> getPieces(Piece[][] board, boolean team){
+    public static ArrayList<int[]> getPieces(Piece[][] board, boolean team){
         ArrayList<int[]> piecesList = new ArrayList();
         
         for(int i = 0; i < 8; i++){
@@ -20,12 +20,10 @@ public class Engine {
         return piecesList;
     }
     
-    public ArrayList<int[]> getMoves(Piece[][] state,int y, int x, boolean team, boolean inCheck){
+    public static ArrayList<int[]> getMoves(Piece[][] state,int y, int x){
         
         ArrayList<int[]> availMoves = new ArrayList<int[]>();
         Piece p = state[y][x]; // pointer to the piece needing moves
-        Piece[][] boardToCheckForCheck; // will be checked for "check" later
-        int checkCheckResult; // result of checking result board for check
         
         // gets the game piece at the x and y coordinates and checks what type of piece it is as well as the team
         // assuming the x and y coordinate scheme is correct
@@ -366,27 +364,10 @@ public class Engine {
                 break;
         }
         
-        // code for disallowing moving into check (check always now)
-        /*if(inCheck){ // if in check*/
-            // for each move yielded by availMoves
-            // traverse move ArrayList in reverse so that removing doesn't change index of items iterated after the removed
-            for(int i = availMoves.size()-1; i >= 0; i--){ 
-                // check to see if executing the move results in check
-                boardToCheckForCheck = getBoardAfterMove(state, new Move(y, x, availMoves.get(i)[0], availMoves.get(i)[1]));
-                
-                checkCheckResult = stateCheck(boardToCheckForCheck,team);
-                if(checkCheckResult != 0){
-                    // if so then remove from available moves
-                    availMoves.remove(i);
-                }
-            }
-            
-        /*}*/
         return availMoves;
-        
     }
     
-    public Piece[][] getBoardAfterMove(Piece[][] b, Move m){
+    public static Piece[][] getBoardAfterMove(Piece[][] b, Move m){
         // if piece has not been moved, it has now
         Piece[][] result = new Piece[8][8];
         
