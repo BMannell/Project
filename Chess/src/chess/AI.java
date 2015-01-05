@@ -6,6 +6,7 @@ import java.util.ArrayList;
 public class AI {
     int ply; // number of plys to consider
     Node minimax; // minimax tree head pointer
+    boolean inCheck; // boolean of whether the AI is in check
     
     public AI(int p){
         minimax = null; // set to null
@@ -13,7 +14,8 @@ public class AI {
     }
     
     
-    public Move takeTurn(Piece[][] currentBoardState){
+    public Move takeTurn(Piece[][] currentBoardState, boolean check){
+        inCheck = check;
         Move myMove;
         constructTree(currentBoardState, 0, minimax, false);
         myMove = alphaBetaMax3Head(minimax, -999, 999, ply);
@@ -48,7 +50,7 @@ public class AI {
             else{
                 checked = false;
             }
-            newPlacements = Engine.getMoves(board, pieces.get(i)[0],pieces.get(i)[1]); // get moves for the current piece
+            newPlacements = Engine.getMoves(board, pieces.get(i)[0],pieces.get(i)[1], inCheck); // get moves for the current piece
             
             for(int j = 0; j < newPlacements.size(); j++){ // fir each of the new possible placements of this piece
                 // get a move that the piece can make
