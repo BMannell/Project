@@ -18,12 +18,14 @@ public class Chess {
         
         currentState = Engine.getBoardAfterMove(currentState, move);
         
-        switch(Engine.stateCheck(currentState, true)){
+        boolean aiChecked = false;
+        switch(Engine.stateCheck(currentState, false)){
             case 0:
                 System.out.println("All-clear!");
                 break;
             case 1:
                 System.out.println("Checked!");
+                aiChecked = true;
                 break;
             case 2:
                 System.out.println("Checkmate!");
@@ -34,7 +36,7 @@ public class Chess {
         System.out.println("MadeMove");
         
         //get ai turn
-        Move aiMove = ai.takeTurn(currentState);
+        Move aiMove = ai.takeTurn(currentState, aiChecked);
         currentState = Engine.getBoardAfterMove(currentState, aiMove);
         //check gameover 
         gui.drawBoard();

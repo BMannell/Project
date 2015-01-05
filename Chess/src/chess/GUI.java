@@ -93,6 +93,8 @@ public class GUI extends JFrame{
         main.add(test);
         
         getContentPane().add(main);
+        validate();
+        repaint();
     }
     
     public void customGame(){
@@ -224,6 +226,7 @@ public class GUI extends JFrame{
             for(int x=0;x<8;x++){
                 board[y][x].removeAll();
                 board[y][x].piece = null;
+                board[y][x].revertColour();
                 if(chess.currentState[y][x] != null){
                     board[y][x].addPiece(chess.currentState[y][x]);
                 }
