@@ -88,13 +88,15 @@ public class AI {
     
     
     
-/*
-    private int alphaBetaMax(Node cur, int alpha, int beta, int depthleft ) {
+
+    private double alphaBetaMax(Node n, double alpha, double beta, int depthleft ) {
+        double score;
+        
         if ( depthleft == 0 ){
-            return cur.fitness;
+            return n.fitness;
         }
-        for ( all moves) {
-           score = alphaBetaMin( alpha, beta, depthleft - 1 );
+        for (int i = 0; i < n.children.size(); i++) {
+           score = alphaBetaMin(n.children.get(i), alpha, beta, depthleft - 1 );
            if( score >= beta )
               return beta;   // fail hard beta-cutoff
            if( score > alpha )
@@ -103,10 +105,14 @@ public class AI {
         return alpha;
      }
 
-     private int alphaBetaMin( int alpha, int beta, int depthleft ) {
-        if ( depthleft == 0 ) return -evaluate();
-        for ( all moves) {
-           score = alphaBetaMax( alpha, beta, depthleft - 1 );
+     private double alphaBetaMin(Node n, double alpha, double beta, int depthleft ) {
+        double score;
+         
+         if ( depthleft == 0 ){
+            return (-1)*(n.fitness);
+        }
+        for (int i = 0; i < n.children.size(); i++) {
+           score = alphaBetaMax(n.children.get(i), alpha, beta, depthleft - 1 );
            if( score <= alpha )
               return alpha; // fail hard alpha-cutoff
            if( score < beta )
@@ -114,7 +120,7 @@ public class AI {
         }
         return beta;
      }
-*/     
+     
      
     
 }
