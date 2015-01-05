@@ -7,7 +7,6 @@ public class AI {
     int ply; // number of plys to consider
     Node minimax; // minimax tree head pointer
     
-    
     public AI(int p){
         minimax = null; // set to null
         ply = p; // set number of plys to use
@@ -17,8 +16,8 @@ public class AI {
     public Move takeTurn(Piece[][] currentBoardState){
         Move myMove;
         constructTree(currentBoardState, 0, minimax, false);
-        
-        return null;
+        myMove = alphaBetaMax3Head(minimax, -999, 999, ply);
+        return myMove;
     }
     
     
@@ -85,28 +84,80 @@ public class AI {
         return count;
     }
     
-    
-    
-    
-/*
-    private int alphaBetaMax(Node cur, int alpha, int beta, int depthleft ) {
-        if ( depthleft == 0 ){
-            return cur.fitness;
+    /*
+    private Move alphaBetaDecision(Node head){ // going to be the same as a max node for head
+        Node choice = null;
+        double result;
+        double runningBest = -999;
+        
+        
+        for(int i = 0; i < head.children.size(); i++){
+            result = alphaBetaMin(head.children.get(i),runningBest,,ply);
+            
+            if(result > runningBest){
+                runningBest = result;
+                choice = head.children.get(i);
+            }
+            
+            
+            return choice.moveMade;
         }
-        for ( all moves) {
-           score = alphaBetaMin( alpha, beta, depthleft - 1 );
+        
+    }
+    */
+    
+    /*
+    private Move alphaBetaDecision(Node n, double alpha, double beta, int depthleft ) {
+        double score;
+        
+        if ( depthleft == 0 ){
+            return n.moveMade;
+        }
+        for (int i = 0; i < n.children.size(); i++) {
+           score = alphaBetaMin(n.children.get(i), alpha, beta, depthleft - 1 );
            if( score >= beta )
-              return beta;   // fail hard beta-cutoff
+              return beta; // pruning
            if( score > alpha )
               alpha = score; // alpha acts like max in MiniMax
         }
         return alpha;
      }
-
-     private int alphaBetaMin( int alpha, int beta, int depthleft ) {
-        if ( depthleft == 0 ) return -evaluate();
-        for ( all moves) {
-           score = alphaBetaMax( alpha, beta, depthleft - 1 );
+    */
+    
+    
+    
+    
+    
+    
+    
+    
+    /*
+    private double alphaBetaMax(Node n, double alpha, double beta, int depthleft ) {
+        double score;
+        
+        if ( depthleft == 0 ){
+            return n.fitness;
+        }
+        for (int i = 0; i < n.children.size(); i++) {
+           score = alphaBetaMin(n.children.get(i), alpha, beta, depthleft - 1 );
+           if( score >= beta )
+              return beta; // pruning
+           if( score > alpha )
+              alpha = score; // alpha acts like max in MiniMax
+        }
+        return alpha;
+     }
+    */
+    
+    /*
+     private double alphaBetaMin(Node n, double alpha, double beta, int depthleft ) {
+        double score;
+         
+         if ( depthleft == 0 ){
+            return n.fitness;
+        }
+        for (int i = 0; i < n.children.size(); i++) {
+           score = alphaBetaMin(n.children.get(i), alpha, beta, depthleft - 1 );
            if( score <= alpha )
               return alpha; // fail hard alpha-cutoff
            if( score < beta )
@@ -114,7 +165,105 @@ public class AI {
         }
         return beta;
      }
-*/     
+     */
      
+     
+    private double alphaBetaMax3(Node n, double alpha, double beta, int pliesLeft){
+        double value;
+        
+        if(pliesLeft == 0){
+            return n.fitness;
+        }
+        
+        for(Node child: n.children){
+            value = alphaBetaMin3(child, alpha, beta, pliesLeft-1);
+            
+            if( value >= beta ){ // biger than the minimum from above
+              return value;
+            }
+            if( value > alpha ){ // bigger than above beta
+              alpha = value;
+            }
+            
+        }
+        
+        return alpha;
+        
+    } 
+    private Move alphaBetaMax3Head(Node n, double alpha, double beta, int pliesLeft){
+        double value;
+        Node choice = null;
+        
+        if(pliesLeft == 0){
+            return null;
+        }
+        
+        for(Node child: n.children){
+            value = alphaBetaMin3(child, alpha, beta, pliesLeft-1);
+            
+            if( value >= beta ){ // biger than the minimum from above
+              return (new Move(child.moveMade.oldY, child.moveMade.oldX, child.moveMade.newY, child.moveMade.newX));
+            }
+            if( value > alpha ){ // bigger than above beta
+              alpha = value;
+              choice = child;
+            }
+        }
+        
+        return (new Move(choice.moveMade.oldY, choice.moveMade.oldX, choice.moveMade.newY, choice.moveMade.newX));
+        
+    }
     
+    
+    private double alphaBetaMin3(Node n, double alpha, double beta, int pliesLeft){
+        double value;
+        
+        if(pliesLeft == 0){
+            return n.fitness;
+        }
+        
+        for(Node child: n.children){
+            value = alphaBetaMax3(child, alpha, beta, pliesLeft-1);
+            
+            if( value <= alpha ){
+              return alpha; // pruning
+            }
+           if( value < beta ){
+              beta = value;
+           }
+            
+        }
+        
+        return beta;
+        
+    }
+    
+    
+    
+     /*
+     private double alphaBetaMinTwo(Node n, double alpha, double beta, int pliesLeft){
+         double value;
+         
+         if(pliesLeft == 0){
+             return n.fitness;
+         }
+         
+         for(int i = 0; i < n.children.size(); i++){
+             value = alphaBetaMaxTwo(n.children.get(i), alpha, beta, pliesLeft - 1 );
+             
+             if(value < beta){ // if the 
+                 beta = value;
+             }
+         }
+         return 0.0;
+     }
+     */
+     
+     
+     
+     
+     
+     
+     
+     
 }
