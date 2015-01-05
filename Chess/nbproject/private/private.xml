@@ -3,12 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Ben/School/COSC/3P71/Project/Chess/src/chess/CustomBoard.java</file>
-            <file>file:/C:/Users/Ben/School/COSC/3P71/Project/Chess/src/chess/Engine.java</file>
-            <file>file:/C:/Users/Ben/School/COSC/3P71/Project/Chess/src/chess/Piece.java</file>
-            <file>file:/C:/Users/Ben/School/COSC/3P71/Project/Chess/src/chess/GUI.java</file>
-            <file>file:/C:/Users/Ben/School/COSC/3P71/Project/Chess/src/chess/Move.java</file>
-            <file>file:/C:/Users/Ben/School/COSC/3P71/Project/Chess/src/chess/Chess.java</file>
+            <file>file:/C:/Users/Dylan/git/Project/Chess/src/chess/AI.java</file>
+            <file>file:/C:/Users/Dylan/git/Project/Chess/src/chess/Engine.java</file>
+            <file>file:/C:/Users/Dylan/git/Project/Chess/src/chess/Move.java</file>
+            <file>file:/C:/Users/Dylan/git/Project/Chess/src/chess/GUI.java</file>
         </group>
     </open-files>
 </project-private>

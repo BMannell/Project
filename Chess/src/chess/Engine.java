@@ -20,10 +20,12 @@ public class Engine {
         return piecesList;
     }
     
-    public ArrayList<int[]> getMoves(Piece[][] state,int y, int x){
+    public ArrayList<int[]> getMoves(Piece[][] state,int y, int x, boolean team, boolean inCheck){
         
         ArrayList<int[]> availMoves = new ArrayList<int[]>();
         Piece p = state[y][x]; // pointer to the piece needing moves
+        Piece[][] boardToCheckForCheck; // will be checked for "check" later
+        int checkCheckResult; // result of checking result board for check
         
         // gets the game piece at the x and y coordinates and checks what type of piece it is as well as the team
         // assuming the x and y coordinate scheme is correct
@@ -364,11 +366,24 @@ public class Engine {
                 break;
         }
         
-        
+        // code for disallowing moving into check (check always now)
+        /*if(inCheck){ // if in check*/
+            // for each move yielded by availMoves
+            // traverse move ArrayList in reverse so that removing doesn't change index of items iterated after the removed
+            for(int i = availMoves.size()-1; i >= 0; i--){ 
+                // check to see if executing the move results in check
+                boardToCheckForCheck = getBoardAfterMove(state, new Move(y, x, availMoves.get(i)[0], availMoves.get(i)[1]));
+                
+                checkCheckResult = stateCheck(boardToCheckForCheck,team);
+                if(checkCheckResult != 0){
+                    // if so then remove from available moves
+                    availMoves.remove(i);
+                }
+            }
+            
+        /*}*/
         return availMoves;
         
-        // just a default return for now
-        //return new int[][]{{3,0}};
     }
     
     public Piece[][] getBoardAfterMove(Piece[][] b, Move m){
@@ -500,6 +515,7 @@ public class Engine {
         
         return level;
     }
+    
     private static boolean moveListContains(ArrayList<int[]> moves, int[] pos){
         boolean result = false;
         for(int[] move: moves){

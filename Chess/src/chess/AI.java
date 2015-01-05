@@ -28,7 +28,8 @@ public class AI {
     recursive function to construct the tree
     
     parameters:
-    - the number of plies moved down so far
+    - the number of plies moved
+    down so far
     - current node
     - team making the moves
     */
@@ -39,9 +40,16 @@ public class AI {
         ArrayList<int[]> pieces = brain.getPieces(cur.boardState, t);
         ArrayList<int[]> newPlacements; // the list of potential places to move a piece 
         Piece[][] boardFromMove = null; // board that results from executing a move
+        boolean checked = false;
         
         for(int i = 0; i < pieces.size(); i++){ // for each piece owned on the board
-            newPlacements = brain.getMoves(cur.boardState, pieces.get(i)[0],pieces.get(i)[1]); // get moves for the current piece
+            if(brain.stateCheck(cur.boardState,t) != 0){
+                checked = true;
+            }
+            else{
+                checked = false;
+            }
+            newPlacements = brain.getMoves(cur.boardState, pieces.get(i)[0],pieces.get(i)[1],t,checked); // get moves for the current piece
             
             for(int j = 0; j < newPlacements.size(); j++){ // fir each of the new possible placements of this piece
                 // get the resulting board state
@@ -77,7 +85,7 @@ public class AI {
     
     
     
-    /*
+    
     private int alphaBetaMax( int alpha, int beta, int depthleft ) {
         if ( depthleft == 0 ){
             return evaluate();
@@ -103,6 +111,10 @@ public class AI {
         }
         return beta;
      }
-    */
+    
+     
+     
+     
+     
     
 }
