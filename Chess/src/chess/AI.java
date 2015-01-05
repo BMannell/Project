@@ -83,10 +83,10 @@ public class AI {
     
     
     
-    /*
-    private int alphaBetaMax( int alpha, int beta, int depthleft ) {
+/*
+    private int alphaBetaMax(Node cur, int alpha, int beta, int depthleft ) {
         if ( depthleft == 0 ){
-            return evaluate();
+            return cur.fitness;
         }
         for ( all moves) {
            score = alphaBetaMin( alpha, beta, depthleft - 1 );
@@ -109,10 +109,7 @@ public class AI {
         }
         return beta;
      }
-    
-     
-     */
-     
+*/     
      
     
 }
