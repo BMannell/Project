@@ -253,7 +253,7 @@ public class GUI extends JFrame{
             validate();
             repaint();
         }else{
-            chess.makeMove(new Move(selectedPiece.X,selectedPiece.Y,bs.X,bs.Y));
+            chess.makeMove(new Move(selectedPiece.Y,selectedPiece.X,bs.Y,bs.X));
         }
     }
     

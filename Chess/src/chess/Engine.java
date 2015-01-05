@@ -494,7 +494,7 @@ public class Engine {
             
             /* right */ 
             
-            else if (x > kingPos[x]) {
+            else if (x > kingPos[1]) {
                 for (int i = kingPos[1] + 1; i< 8; i++) {
                     if (state[y][i] != null && i != x) {
                         if (i < x) {
