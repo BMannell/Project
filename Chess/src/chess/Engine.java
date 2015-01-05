@@ -12,8 +12,8 @@ public class Engine {
         
         for(int i = 0; i < 8; i++){
             for(int j = 0; j < 8; j++){
-                if(team = board[j][i].team){ // belongs to the player
-                    piecesList.add(new int[]{j,i});
+                if(board[i][j] != null && team == board[i][j].team){ // belongs to the player
+                    piecesList.add(new int[]{i,j});
                 }
             }
         }
@@ -394,7 +394,7 @@ public class Engine {
         }
         
         //get moves if king is under check
-        if(!underCheck && !p.type.equals("king")){
+        if(underCheck && !p.type.equals("king")){
             
             //find all enemy pieces that can attack king
             ArrayList<int[]> enemyRoute = new ArrayList();
@@ -467,14 +467,14 @@ public class Engine {
         
         /* vertical */
         if( x == kingPos[1]){
-            System.out.println("Vertical");
+            //System.out.println("Vertical");
             /* above */
             if (y < kingPos[0]) {
-                System.out.println("above");
+                //System.out.println("above");
                 for (int i = kingPos[0] - 1; i >= 0; i--) {
                     if (state[i][x] != null && i != y) {
                         if (i < y) {
-                            System.out.println("above2");
+                            //System.out.println("above2");
                             if (!state[i][x].team && (state[i][x].type.equals("rook") || state[i][x].type.equals("queen"))) { //if rook or queen inbetween
                                 inlineRoute.add(new int[]{i, x});    //can attack that piece
                                 danger = true;
@@ -786,7 +786,7 @@ public class Engine {
                         }
                         
                         if(moveListContains(moves, goodKingLeo)){   //if the piece is checking king add it to the list
-                            System.out.println("adding kill route");
+                            //System.out.println("adding kill route");
                             moves.add(0, new int[]{y, x});
                             ArrayList routes = getRouteToKing(moves, state[y][x].type, goodKingLeo);
                             enemyRoutes.add(routes);
