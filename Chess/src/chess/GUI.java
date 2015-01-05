@@ -29,7 +29,7 @@ public class GUI extends JFrame{
     JRadioButton whiteButton;       //colour select
     JFormattedTextField plySelect;  //ply input
     BoardSquare selectedPiece;      //piece to move
-    
+    boolean underCheck = false;  //if play is being checked
     public GUI(Chess c){
         super("Chess");
         chess = c;
@@ -156,7 +156,7 @@ public class GUI extends JFrame{
         
         /* Ply input field */
         plySelect = new JFormattedTextField(NumberFormat.getIntegerInstance());
-        plySelect.setValue((long)8);
+        plySelect.setValue((long)3);
         plySelect.setColumns(3);
         
         ply.add(plySelect);
@@ -170,7 +170,7 @@ public class GUI extends JFrame{
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 int ply = (int)(long)plySelect.getValue();
                 if(ply < 1){
-                    ply = 8;
+                    ply = 3;
                 }
                 chess.newGame(ply,whiteButton.isSelected());
                 boardSetup();
@@ -253,7 +253,7 @@ public class GUI extends JFrame{
             validate();
             repaint();
         }else{
-            chess.makeMove(new Move(selectedPiece.X,selectedPiece.Y,bs.X,bs.Y));
+            chess.makeMove(new Move(selectedPiece.Y,selectedPiece.X,bs.Y,bs.X));
         }
     }
     
@@ -435,7 +435,7 @@ public class GUI extends JFrame{
                 } else {
                     selectedPiece = this;
                     setBlue();
-                    ArrayList<int[]> moves = Engine.getMoves(chess.currentState, Y, X);
+                    ArrayList<int[]> moves = Engine.getMoves(chess.currentState, Y, X, underCheck);
                     for (int[] move : moves) {
                         board[move[0]][move[1]].setToMove();
                     }

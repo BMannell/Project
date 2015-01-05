@@ -33,9 +33,11 @@ public class Chess {
         gui.drawBoard();
         System.out.println("MadeMove");
         
-        //get ai turn 
+        //get ai turn
+        Move aiMove = ai.takeTurn(currentState);
+        currentState = Engine.getBoardAfterMove(currentState, aiMove);
         //check gameover 
-        //gui.drawBoard();
+        gui.drawBoard();
         
         gui.unlock();
     }

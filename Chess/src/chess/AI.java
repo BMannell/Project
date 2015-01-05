@@ -36,14 +36,17 @@ public class AI {
         if(argPly == this.ply){
             return;
         }
+
         
         ArrayList<int[]> pieces = Engine.getPieces(board, t);
+
         ArrayList<int[]> newPlacements; // the list of potential places to move a piece 
         Move moveFromPiece = null; // a move extracted from the piece
         Piece[][] boardFromMoveFromPiece = null; // board that results from executing a move
         boolean checked = false;
         
         for(int i = 0; i < pieces.size(); i++){ // for each piece owned on the board
+
             if(Engine.stateCheck(board,t) != 0){
                 checked = true;
             }
@@ -132,11 +135,16 @@ public class AI {
     
     
     
+
     
     /*
     private double alphaBetaMax(Node n, double alpha, double beta, int depthleft ) {
         double score;
         
+=======
+    /*
+    private int alphaBetaMax( int alpha, int beta, int depthleft ) {
+>>>>>>> inlineKing
         if ( depthleft == 0 ){
             return n.fitness;
         }
@@ -217,6 +225,7 @@ public class AI {
     }
     
     
+
     private double alphaBetaMin3(Node n, double alpha, double beta, int pliesLeft){
         double value;
         
@@ -260,12 +269,5 @@ public class AI {
          return 0.0;
      }
      */
-     
-     
-     
-     
-     
-     
-     
      
 }

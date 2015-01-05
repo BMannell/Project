@@ -6,13 +6,14 @@ public class Engine {
    
     // fetches a list of which pieces on the board belong to the player specified
     // (used to know which pieces to make successors from)
-    public static ArrayList<int[]> getPieces(Piece[][] board, boolean team){
+
+    public static ArrayList<int[]> getPieces(Piece[][] board, boolean team ){
         ArrayList<int[]> piecesList = new ArrayList();
         
         for(int i = 0; i < 8; i++){
             for(int j = 0; j < 8; j++){
-                if(team = board[j][i].team){ // belongs to the player
-                    piecesList.add(new int[]{j,i});
+                if(board[i][j] != null && team == board[i][j].team){ // belongs to the player
+                    piecesList.add(new int[]{i,j});
                 }
             }
         }
@@ -20,13 +21,35 @@ public class Engine {
         return piecesList;
     }
     
-    public static ArrayList<int[]> getMoves(Piece[][] state,int y, int x){
+
+    public static ArrayList<int[]> getMoves(Piece[][] state, int y, int x){
+        return getMoves(state,y,x,false);
+    }
+    
+    public static ArrayList<int[]> getMoves(Piece[][] state,int y, int x, boolean underCheck){
+
         
-        ArrayList<int[]> availMoves = new ArrayList<int[]>();
+        ArrayList<int[]> availMoves = new ArrayList<int[]>(), blockingRoutes = new ArrayList();
         Piece p = state[y][x]; // pointer to the piece needing moves
         
-        // gets the game piece at the x and y coordinates and checks what type of piece it is as well as the team
-        // assuming the x and y coordinate scheme is correct
+        int[] kingPos = new int[]{-1,-1};
+        //find king
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (state[i][j] != null && state[i][j].team == p.team && state[i][j].type.equals("king")) {
+                    //System.out.println("king " + i + ":" + j);
+                    kingPos = new int[]{i, j};
+                    break;
+                }
+            }
+        }
+        
+        //get moves to stay out of check
+        if(p.type != "king"){
+            blockingRoutes = getKingLine(state,y,x,kingPos);
+        }
+        
+        //get available moves for each piece
         switch (p.type) {
             case "pawn":
                 int direction; // up or down depending on team. Applied to any vertical positioning. only matters for pawn
@@ -338,7 +361,7 @@ public class Engine {
                 if((x-1 >= 0 && x-1 <= 7 && y >= 0 && y <= 7 ) && (state[y][x-1] == null || state[y][x-1].team != p.team)){ // to the left
                     availMoves.add(new int[]{y,x-1});
                 }
-                else if((x-1 >= 0 && x-1 <= 7 && y+1 >= 0 && y+1 <= 7 ) && (state[y+1][x-1] == null || state[y+1][x-1].team != p.team)){ // up and to the left
+                if((x-1 >= 0 && x-1 <= 7 && y+1 >= 0 && y+1 <= 7 ) && (state[y+1][x-1] == null || state[y+1][x-1].team != p.team)){ // up and to the left
                     availMoves.add(new int[]{y+1,x-1});
                 }
                 if((x >= 0 && x <= 7 && y+1 >= 0 && y+1 <= 7 ) && (state[y+1][x] == null || state[y+1][x].team != p.team)){ // up
@@ -360,11 +383,326 @@ public class Engine {
                     availMoves.add(new int[]{y-1,x-1});
                 }
                 
+                ArrayList newList = new ArrayList();
+                for(int[] move:availMoves)
+                    if(checkKingMove(state, move[0], move[1], y ,x))
+                        newList.add(move);
+                availMoves = newList;
+                
                 /* Requires castling check still */
                 break;
         }
         
+        //get moves if king is under check
+        if(underCheck && !p.type.equals("king")){
+            
+            //find all enemy pieces that can attack king
+            ArrayList<int[]> enemyRoute = new ArrayList();
+            for (int i =0;i<8;i++) {
+                for (int j = 0; j < 8;j++) {
+                    if (state[i][j] != null && state[i][j].team != p.team) {
+                        ArrayList<int[]> moves = getMoves(state, i, j); //get moves of current piece
+                        if (moveListContains(moves, kingPos)) {   //if the piece is checking king add it to the list
+                            if(!enemyRoute.isEmpty()){ //if another piece checking king too
+                                enemyRoute = new ArrayList();  //this piece cannot move
+                                break;
+                            }
+                            moves.add(0, new int[]{i, j});
+                            ArrayList<int[]> route = getRouteToKing(moves, state[i][j].type, kingPos);
+                            enemyRoute.addAll(route);
+                        }
+                    }
+                }
+            }
+            //intersect the possible moves and the checking pieces
+            ArrayList<int[]> newList = new ArrayList();
+            for (int[] move : availMoves) {
+                if (moveListContains(enemyRoute, move)) {
+                    newList.add(move);
+                }
+            }
+            availMoves = newList;
+        }
+        
+        if (!availMoves.isEmpty() && !blockingRoutes.isEmpty()) {
+            ArrayList<int[]> newList = new ArrayList();
+            for (int[] move: availMoves) {
+                if (moveListContains(blockingRoutes, move)) {
+                    newList.add(move);
+                }
+            }
+            availMoves = newList;
+        }
+        
         return availMoves;
+    }
+    
+    private static boolean checkKingMove(Piece[][] state, int newY, int newX, int oldY, int oldX){
+        state[newY][newX] = state[oldY][oldX];
+        state[oldY][oldX] = null;
+        ArrayList<int[]> moves = new ArrayList();
+        boolean safe = true;
+        for(int i = 0; i<8;i++){
+            for(int j = 0; j < 8; j++){
+                if(state[i][j] != null && state[i][j].team != state[newY][newX].team)
+                    moves.addAll(getMoves(state,i,j));
+            }
+        }
+        if( moveListContains(moves, new int[]{newY,newX}))
+            safe = false;
+        state[oldY][oldX] = state[newY][newX];
+        state[newY][newX] = null;
+        return safe;
+    }
+    private static ArrayList<int[]> getKingLine(Piece[][] state, int y, int x, int[] kingPos){
+        Piece piece = state[y][x];
+        boolean danger = false;
+        ArrayList<int[]> inlineRoute = new ArrayList();
+        
+        
+        int diffY = y - kingPos[0];
+        int diffX = x - kingPos[1];
+        
+        //iterate through lines of sight
+        
+        /* vertical */
+        if( x == kingPos[1]){
+            //System.out.println("Vertical");
+            /* above */
+            if (y < kingPos[0]) {
+                //System.out.println("above");
+                for (int i = kingPos[0] - 1; i >= 0; i--) {
+                    if (state[i][x] != null && i != y) {
+                        if (i < y) {
+                            //System.out.println("above2");
+                            if (!state[i][x].team && (state[i][x].type.equals("rook") || state[i][x].type.equals("queen"))) { //if rook or queen inbetween
+                                inlineRoute.add(new int[]{i, x});    //can attack that piece
+                                danger = true;
+                            }
+                            break;
+
+                        } else{                            
+                            if (!state[i][x].team && (state[i][x].type.equals("rook") || state[i][x].type.equals("queen"))) { //if rook or queen 
+                                inlineRoute = new ArrayList();
+                                inlineRoute.add(new int[]{i, x});    //can  only attack that piece
+                                danger = true;
+                            }
+                            break;
+                        }
+                    }
+                    inlineRoute.add(new int[]{i,x});
+                }
+                if(!danger)
+                    inlineRoute = new ArrayList(); //no pieces inline
+            }
+            /* below */
+            else if (y > kingPos[0]) {
+                for (int i = kingPos[0] + 1; i < 8; i++) {
+                    if (i > y) {    //in between
+                        if (state[i][x] != null) { //piece inbetween
+                            if (!state[i][x].team && (state[i][x].type.equals("rook") || state[i][x].type.equals("queen"))) { //if rook or queen inbetween
+                                inlineRoute = new ArrayList();
+                                inlineRoute.add(new int[]{i, x});    //can only attack that piece
+                                danger = true;
+                            }
+                            break;
+                        }
+                    } else if (i < y) {
+                        if (state[i][x] != null) {    //first piece
+                            if (!state[i][x].team && (state[i][x].type.equals("rook") || state[i][x].type.equals("queen"))) { //if rook or queen 
+                                inlineRoute.add(new int[]{i, x});    //can attack that piece
+                                danger = true;
+                            }
+                            break;
+                        }
+                    }
+                }
+                if(!danger)
+                    inlineRoute = new ArrayList(); //no pieces inline
+            }
+        }
+        
+        /* horizontal */
+        else if (y == kingPos[0]) {
+            
+            /* left */
+            if (x < kingPos[1]) {
+                for (int i = kingPos[1] - 1; i >= 0; i--) {
+                    if (state[y][i] != null && i != x) {
+                        if (i > x) {
+                            if (!state[y][i].team && (state[y][i].type.equals("rook") || state[y][i].type.equals("queen"))) { //if rook or queen inbetween
+                                inlineRoute = new ArrayList();
+                                inlineRoute.add(new int[]{y, i});    //can only attack that piece
+                                danger = true;
+                            }
+                            break;
+                        } else if (i < x) {
+                            //first piece
+                            if (!state[y][i].team && (state[y][i].type.equals("rook") || state[y][i].type.equals("queen"))) { //if rook or queen 
+                                inlineRoute.add(new int[]{y, i});    //can attack that piece
+                                danger = true;
+                            }
+                            break;
+
+                        }
+                        
+                    }else inlineRoute.add(new int[]{y, i});    //piece not there
+                }
+                if(!danger)
+                    inlineRoute = new ArrayList(); //no pieces inline
+            }
+            
+            /* right */ 
+            
+            else if (x > kingPos[1]) {
+                for (int i = kingPos[1] + 1; i< 8; i++) {
+                    if (state[y][i] != null && i != x) {
+                        if (i < x) {
+                            if (!state[y][i].team && (state[y][i].type.equals("rook") || state[y][i].type.equals("queen"))) { //if rook or queen inbetween
+                                inlineRoute = new ArrayList();
+                                inlineRoute.add(new int[]{y, i});    //can only attack that piece
+                                danger = true;
+                            }
+                            break;
+                        } else if (i > x) {
+                            //first piece
+                            if (!state[y][i].team && (state[y][i].type.equals("rook") || state[y][i].type.equals("queen"))) { //if rook or queen 
+                                inlineRoute.add(new int[]{y, i});    //can attack that piece
+                                danger = true;
+                            }
+                            break;
+
+                        }
+                        
+                    }else inlineRoute.add(new int[]{y, i});    //piece not there
+                }
+                if(!danger)
+                    inlineRoute = new ArrayList(); //no pieces inline
+            }
+        }
+
+        /* upper left or lower right */
+        
+        else if(diffY == diffX){
+            
+            /* upper left */
+            
+            if (diffY < 0) {
+
+                for (int i = kingPos[0] - 1, j = kingPos[1] - 1; i >= 0 && j >= 0; i--, j--) {  //move along diag
+                    if (state[i][j] != null && i != y) {
+                        if (i > y) {
+                            //inbetween
+                            if (!state[i][j].team && (state[i][j].type.equals("rook") || state[i][j].type.equals("queen"))) { //if rook or queen inbetween
+                                inlineRoute = new ArrayList();
+                                inlineRoute.add(new int[]{i, j});    //can only attack that piece
+                                danger = true;
+                            }
+                            break;
+                        } else if (i < y) {
+                            //first piece beyond
+                            if (!state[i][j].team && (state[i][j].type.equals("rook") || state[i][j].type.equals("queen"))) { //if rook or queen 
+                                inlineRoute.add(new int[]{i, j});    //can attack that piece
+                                danger = true;
+                            }
+                            break;
+                        }
+                    } else {
+                        inlineRoute.add(new int[]{i, j});    //piece not there
+                    }
+                }
+                if(!danger)
+                    inlineRoute = new ArrayList(); //no pieces inline
+            }else{  //lower right
+                for (int i = kingPos[0] + 1, j = kingPos[1] + 1; i < 8 && j < 8; i++, j++) {  //move along diag
+                    if (state[i][j] != null && i != y) {
+                        if (i < y) {
+                            //inbetween
+                            if (!state[i][j].team && (state[i][j].type.equals("rook") || state[i][j].type.equals("queen"))) { //if rook or queen inbetween
+                                inlineRoute = new ArrayList();
+                                inlineRoute.add(new int[]{i, j});    //can only attack that piece
+                                danger = true;
+                            }
+                            break;
+                        } else if (i > y) {
+                            //first piece beyond
+                            if (!state[i][j].team && (state[i][j].type.equals("rook") || state[i][j].type.equals("queen"))) { //if rook or queen 
+                                inlineRoute.add(new int[]{i, j});    //can attack that piece
+                                danger = true;
+                            }
+                            break;
+                        }
+                    } else {
+                        inlineRoute.add(new int[]{i, j});    //piece not there
+                    }
+                }
+                if(!danger)
+                    inlineRoute = new ArrayList(); //no pieces inline
+            }
+                
+                
+            
+        }
+        
+        
+        else if(diffY == diffX*(-1)){// lower left and upper right 
+            
+            if (diffY < 0) {    //upper right
+                for (int i = kingPos[0] - 1, j = kingPos[1] + 1; i >= 0 && j< 8; i--, j++) {  //move along diag
+                    if (state[i][j] != null && i != y) {
+                        if (i > y) {
+                            //inbetween
+                            if (!state[i][j].team && (state[i][j].type.equals("rook") || state[i][j].type.equals("queen"))) { //if rook or queen inbetween
+                                inlineRoute = new ArrayList();
+                                inlineRoute.add(new int[]{i, j});    //can only attack that piece
+                                danger = true;
+                            }
+                            break;
+                        } else if (i < y) {
+                            //first piece beyond
+                            if (!state[i][j].team && (state[i][j].type.equals("rook") || state[i][j].type.equals("queen"))) { //if rook or queen 
+                                inlineRoute.add(new int[]{i, j});    //can attack that piece
+                                danger = true;
+                            }
+                            break;
+                        }
+                    } else {
+                        inlineRoute.add(new int[]{i, j});    //piece not there
+                    }
+                }
+                if (!danger) {
+                    inlineRoute = new ArrayList(); //no pieces inline
+                }
+            } else {  //lower right
+                for (int i = kingPos[0] + 1, j = kingPos[1] - 1; i < 8 && j >= 0; i++, j--) {  //move along diag
+                    if (state[i][j] != null && i != y) {
+                        if (i < y) {
+                            //inbetween
+                            if (!state[i][j].team && (state[i][j].type.equals("rook") || state[i][j].type.equals("queen"))) { //if rook or queen inbetween
+                                inlineRoute = new ArrayList();
+                                inlineRoute.add(new int[]{i, j});    //can only attack that piece
+                                danger = true;
+                            }
+                            break;
+                        } else if (i > y) {
+                            //first piece beyond
+                            if (!state[i][j].team && (state[i][j].type.equals("rook") || state[i][j].type.equals("queen"))) { //if rook or queen 
+                                inlineRoute.add(new int[]{i, j});    //can attack that piece
+                                danger = true;
+                            }
+                            break;
+                        }
+                    } else {
+                        inlineRoute.add(new int[]{i, j});    //piece not there
+                    }
+                }
+                if (!danger) {
+                    inlineRoute = new ArrayList(); //no pieces inline
+                }
+            }
+        }
+        
+        return inlineRoute;
     }
     
     public static Piece[][] getBoardAfterMove(Piece[][] b, Move m){
@@ -406,10 +744,10 @@ public class Engine {
         for (int y = 0; y < 8; y++) {  //loop through every square on board to get pieces
             for (int x = 0; x < 8; x++) {
                 if (state[y][x] != null && state[y][x].team == team && state[y][x].type.equals("king")) {    //if the unit is the good king
-                    System.out.println("Found the king!");
+                    //System.out.println("Found the king!");
                     goodKingLeo = new int[]{y, x};
                     availKingMoves = getMoves(state, y, x);
-                    System.out.println(availKingMoves.size());
+                    //System.out.println(availKingMoves.size());
                 }
             }
         }
@@ -432,7 +770,7 @@ public class Engine {
                             }
                         }
                     }else{
-                        System.out.println("adding enemy moves");
+                        //System.out.println("adding enemy moves");
                         ArrayList<int[]> moves = getMoves(state, y, x); //get moves of current piece
                         for(int[] newMove: moves){
                             boolean add = true;
@@ -448,7 +786,7 @@ public class Engine {
                         }
                         
                         if(moveListContains(moves, goodKingLeo)){   //if the piece is checking king add it to the list
-                            System.out.println("adding kill route");
+                            //System.out.println("adding kill route");
                             moves.add(0, new int[]{y, x});
                             ArrayList routes = getRouteToKing(moves, state[y][x].type, goodKingLeo);
                             enemyRoutes.add(routes);
