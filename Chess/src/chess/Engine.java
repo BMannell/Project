@@ -61,7 +61,10 @@ public class Engine {
                     direction = 1; // down (y + movement*1 is downward movement)
                 }
 
-                
+                if(!p.moved){
+                    if(state[y+(2*direction)][x] == null)
+                        availMoves.add(new int[]{y+(2*direction),x});
+                }
 
                 if(state[y+(1*direction)][x] == null){ // if square ahead is empty
                     availMoves.add(new int[]{y+(1*direction),x});

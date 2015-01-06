@@ -8,7 +8,7 @@ public class AI {
     Node minimax; // minimax tree head pointer
     
     public AI(int p){
-        minimax = null; // set to null
+        minimax = new Node(); // set to null
         ply = p; // set number of plys to use
     }
     

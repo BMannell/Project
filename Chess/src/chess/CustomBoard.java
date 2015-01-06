@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.text.NumberFormat;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -18,6 +19,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -33,6 +35,7 @@ public class CustomBoard extends JPanel{
     boolean addPiece = false;   //if piece has been selected to add
     JPanel remove;
     Chess chess;
+    JFormattedTextField plySelect;
     
     public CustomBoard(Chess c){
         setSize(512,512);
@@ -72,7 +75,6 @@ public class CustomBoard extends JPanel{
         JPanel opts = new JPanel();
         opts.setLayout(new BoxLayout(opts, BoxLayout.Y_AXIS));
         opts.setVisible(true);
-        opts.add(Box.createRigidArea(new Dimension(0,70)));
         
         //colour select for player
         JPanel pColor = new JPanel();
@@ -129,6 +131,31 @@ public class CustomBoard extends JPanel{
         });
         
         opts.add(remove);
+        opts.add(Box.createRigidArea(new Dimension(0,70)));
+        
+        /* Ply input panel*/
+        JPanel ply = new JPanel();
+        ply.setVisible(true);
+        title = BorderFactory.createTitledBorder(
+                BorderFactory.createLineBorder(Color.BLACK), "Ply");
+        title.setTitleJustification(TitledBorder.CENTER);
+        ply.setBorder(title);
+        Dimension plyD = new Dimension(80,60);
+        ply.setMaximumSize(plyD);
+        ply.setMinimumSize(plyD);
+        ply.setPreferredSize(plyD);
+        ply.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        
+        /* Ply input field */
+        plySelect = new JFormattedTextField(NumberFormat.getIntegerInstance());
+        plySelect.setValue((long)3);
+        plySelect.setColumns(3);
+        
+        ply.add(plySelect);
+        
+        opts.add(ply);
+        
         opts.add(Box.createRigidArea(new Dimension(0,70)));
         
         /* start button */
