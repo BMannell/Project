@@ -7,7 +7,7 @@ public class Chess {
     public Piece[][] currentState = new Piece[8][8]; // the board
     AI ai;
     GUI gui;
-    
+    boolean playerChecked, aiChecked;
     public Chess(){
         gui = new GUI(this);
         //gui.displayMainMenu();
@@ -18,12 +18,15 @@ public class Chess {
         
         currentState = Engine.getBoardAfterMove(currentState, move);
         
-        switch(Engine.stateCheck(currentState, true)){
+        aiChecked = false;
+        switch(Engine.stateCheck(currentState, false)){
             case 0:
                 System.out.println("All-clear!");
+                aiChecked = false;
                 break;
             case 1:
                 System.out.println("Checked!");
+                aiChecked = true;
                 break;
             case 2:
                 System.out.println("Checkmate!");
@@ -34,9 +37,25 @@ public class Chess {
         System.out.println("MadeMove");
         
         //get ai turn
-        Move aiMove = ai.takeTurn(currentState);
+        Move aiMove = ai.takeTurn(currentState, aiChecked);
         currentState = Engine.getBoardAfterMove(currentState, aiMove);
-        //check gameover 
+        //check gameover
+        
+                switch(Engine.stateCheck(currentState, false)){
+            case 0:
+                System.out.println("All-clear!");
+                playerChecked = false;
+                break;
+            case 1:
+                System.out.println("Checked!");
+                playerChecked = true;
+                break;
+            case 2:
+                System.out.println("Checkmate!");
+                break;
+        }
+                
+        gui.underCheck = playerChecked;
         gui.drawBoard();
         
         gui.unlock();
