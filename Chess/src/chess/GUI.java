@@ -172,7 +172,7 @@ public class GUI extends JFrame{
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 int ply = (int)(long)plySelect.getValue();
                 if(ply < 1){
-                    ply = 3;
+                    ply = 1;
                 }
                 chess.newGame(ply,whiteButton.isSelected());
                 boardSetup();

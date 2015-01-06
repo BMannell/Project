@@ -149,7 +149,7 @@ public class CustomBoard extends JPanel{
         
         /* Ply input field */
         plySelect = new JFormattedTextField(NumberFormat.getIntegerInstance());
-        plySelect.setValue((long)3);
+        plySelect.setValue((long)2);
         plySelect.setColumns(3);
         
         ply.add(plySelect);
@@ -162,7 +162,11 @@ public class CustomBoard extends JPanel{
         JButton start = new JButton("Start");
         start.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                chess.initCustomGameBoard(board, playerColour);
+                int ply = (int) (long) plySelect.getValue();
+                if (ply < 1) {
+                    ply = 1;
+                }
+                chess.newCustomGame(board, playerColour, ply);
             }
         });
         start.setAlignmentX(Component.CENTER_ALIGNMENT);

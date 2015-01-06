@@ -21,40 +21,40 @@ public class Chess {
         aiChecked = false;
         switch(Engine.stateCheck(currentState, false)){
             case 0:
-                System.out.println("All-clear!");
+                //System.out.println("All-clear!");
                 aiChecked = false;
                 break;
             case 1:
-                System.out.println("Checked!");
+                //System.out.println("Checked!");
                 aiChecked = true;
                 break;
             case 2:
-                System.out.println("Checkmate!");
+                //System.out.println("Checkmate!");
                 break;
         }
         
         gui.drawBoard();
-        System.out.println("MadeMove");
+        //System.out.println("MadeMove");
         
         //get ai turn
         Move aiMove = ai.takeTurn(currentState, aiChecked);
         
-        System.out.println("AI Move = [" + aiMove.oldY + "," + aiMove.oldX + "] => [" + aiMove.newY + "," + aiMove.newX + "]");
+        //System.out.println("AI Move = [" + aiMove.oldY + "," + aiMove.oldX + "] => [" + aiMove.newY + "," + aiMove.newX + "]");
         
         currentState = Engine.getBoardAfterMove(currentState, aiMove);
         //check gameover
         
             switch(Engine.stateCheck(currentState, false)){
             case 0:
-                System.out.println("All-clear!");
+                //System.out.println("All-clear!");
                 playerChecked = false;
                 break;
             case 1:
-                System.out.println("Checked!");
+                //System.out.println("Checked!");
                 playerChecked = true;
                 break;
             case 2:
-                System.out.println("Checkmate!");
+                //System.out.println("Checkmate!");
                 break;
         }
                 
@@ -64,26 +64,6 @@ public class Chess {
         gui.unlock();
     }
     
-    /*
-    public void playGame() {
-        boolean play;
-        Move move;
-        do {
-            if (turn) { // player 1
-                move = player1.getMove();
-            } else { // player 2
-                move = player2.getMove();
-            }
-            currentState = Engine.makeMove(move);
-            gui.drawBoard();
-            logMove(move);
-
-            checkStalemate();
-            play = Engine.stateCheck(currentState);
-
-            turn = !turn;
-        } while (play);
-    }*/
     
     public void checkStalemate() {
 
@@ -115,6 +95,12 @@ public class Chess {
         initGameBoard(colour);
         ai = new AI(ply);
     }
+    
+    public void newCustomGame(CustomBoard.Square[][] customBoard, boolean colour, int ply){
+      initCustomGameBoard(customBoard, colour);
+      ai = new AI(ply);
+    }
+    
     /* initGameBoard
      * @param c
      * determines players team

@@ -386,13 +386,13 @@ public class Engine {
                     availMoves.add(new int[]{y-1,x-1});
                 }
                 
+                /*
                 ArrayList newList = new ArrayList();
                 for(int[] move:availMoves)
                     if(checkKingMove(state, move[0], move[1], y ,x))
                         newList.add(move);
                 availMoves = newList;
-                
-                /* Requires castling check still */
+                */
                 break;
         }
         

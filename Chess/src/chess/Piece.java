@@ -38,7 +38,7 @@ public class Piece {
         }
         try{
         BufferedImage myPicture = ImageIO.read(this.getClass().getResource(imagePath));
-        myPicture = resize(myPicture,40,40);
+        myPicture = resizeImage(myPicture);
         image = new JLabel(new ImageIcon(myPicture));
         }
         catch(IOException ioe){
@@ -77,7 +77,7 @@ public class Piece {
         }
         try {
             BufferedImage myPicture = ImageIO.read(this.getClass().getResource(imagePath));
-            myPicture = resize(myPicture, 40, 40);
+            myPicture = resizeImage(myPicture);
             image = new JLabel(new ImageIcon(myPicture));
         } catch (IOException ioe) {
             System.out.println(ioe.getMessage());
@@ -85,12 +85,12 @@ public class Piece {
         image.setVisible(true);
     }
     
-    public static BufferedImage resize(BufferedImage image, int width, int height) {
-        BufferedImage bi = new BufferedImage(width, height, BufferedImage.TRANSLUCENT);
-        Graphics2D g2d = (Graphics2D) bi.createGraphics();
-        g2d.addRenderingHints(new RenderingHints(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY));
-        g2d.drawImage(image, 0, 0, width, height, null);
-        g2d.dispose();
-        return bi;
+    public static BufferedImage resizeImage(BufferedImage image) {
+        BufferedImage buffedImg = new BufferedImage(40, 40, BufferedImage.TRANSLUCENT);
+        Graphics2D twoDGraphs = (Graphics2D) buffedImg.createGraphics();
+        twoDGraphs.addRenderingHints(new RenderingHints(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY));
+        twoDGraphs.drawImage(image, 0, 0, 40, 40, null);
+        twoDGraphs.dispose();
+        return buffedImg;
     }
 }
