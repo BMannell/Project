@@ -44,7 +44,7 @@ public class Chess {
         currentState = Engine.getBoardAfterMove(currentState, aiMove);
         //check gameover
         
-                switch(Engine.stateCheck(currentState, false)){
+            switch(Engine.stateCheck(currentState, false)){
             case 0:
                 System.out.println("All-clear!");
                 playerChecked = false;

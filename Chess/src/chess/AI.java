@@ -9,7 +9,8 @@ public class AI {
     boolean inCheck; // boolean of whether the AI is in check
     
     public AI(int p){
-        minimax = new Node(new Move(0,0,0,0), 0.0); // set to null
+        
+
         ply = p; // set number of plys to use
     }
     
@@ -17,6 +18,7 @@ public class AI {
     public Move takeTurn(Piece[][] currentBoardState, boolean check){
         inCheck = check;
         Move myMove;
+        minimax = new Node(new Move(0,0,0,0), 0.0); // set to null
         constructTree(currentBoardState, 0, minimax, false);
         myMove = alphaBetaMax3Head(minimax, -999, 999, ply);
         return myMove;
@@ -43,16 +45,9 @@ public class AI {
         ArrayList<int[]> newPlacements; // the list of potential places to move a piece 
         Move moveFromPiece = null; // a move extracted from the piece
         Piece[][] boardFromMoveFromPiece = null; // board that results from executing a move
-        boolean checked = false;
         
         for(int i = 0; i < pieces.size(); i++){ // for each piece owned on the board
 
-            if(Engine.stateCheck(board,t) != 0){
-                checked = true;
-            }
-            else{
-                checked = false;
-            }
             newPlacements = Engine.getMoves(board, pieces.get(i)[0],pieces.get(i)[1], inCheck); // get moves for the current piece
             
             

@@ -24,4 +24,9 @@ public class Node {
         
         moveMade = new Move(m.oldY, m.oldX, m.newY, m.newX);
     }
+    public Node(){
+        children = new ArrayList(); // initialize as empty
+        fitness = 0; // set fitness
+        moveMade = null;
+    }
 }
