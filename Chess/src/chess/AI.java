@@ -9,7 +9,7 @@ public class AI {
     boolean inCheck; // boolean of whether the AI is in check
     
     public AI(int p){
-        minimax = null; // set to null
+        minimax = new Node(new Move(0,0,0,0), 0.0); // set to null
         ply = p; // set number of plys to use
     }
     
@@ -55,15 +55,23 @@ public class AI {
             }
             newPlacements = Engine.getMoves(board, pieces.get(i)[0],pieces.get(i)[1], inCheck); // get moves for the current piece
             
+            
+            
             for(int j = 0; j < newPlacements.size(); j++){ // fir each of the new possible placements of this piece
+                
+
                 // get a move that the piece can make
                 moveFromPiece = new Move(pieces.get(i)[0], pieces.get(i)[1], newPlacements.get(j)[0], newPlacements.get(j)[1]);
                 
                 // get the board that results from the move
                 boardFromMoveFromPiece = Engine.getBoardAfterMove(board, moveFromPiece);
                 
+                
                 // and add it as a node to the current nodes list of children
                 cur.children.add(new Node(moveFromPiece, fitnessEvaluation(boardFromMoveFromPiece))); // get boardState after making the move
+                
+                
+                
             }
         }
         
@@ -80,8 +88,13 @@ public class AI {
         
         for(int i = 0; i < 8; i++){
             for(int j = 0; j < 8; j++){
-                if(!b[i][j].team){ // belongs to the AI player
-                    count++;
+                if(b[i][j] != null){
+                    if(!b[i][j].team){ // belongs to the AI player
+                        count++;
+                    }
+                    else{
+                        count--;
+                    }
                 }
             }
         }

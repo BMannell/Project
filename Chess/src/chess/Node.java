@@ -19,7 +19,7 @@ public class Node {
     double fitness; // evaluated fitness of this board
     
     public Node(Move m, double f){
-        children = null; // initialize as empty
+        children = new ArrayList<Node>(); // initialize as empty
         fitness = f; // set fitness
         
         moveMade = new Move(m.oldY, m.oldX, m.newY, m.newX);
