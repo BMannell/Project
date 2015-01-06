@@ -8,6 +8,21 @@ public class AI {
     Node minimax; // minimax tree head pointer
     boolean inCheck; // boolean of whether the AI is in check
     
+    // matrix of positional advantages
+    double[][] positionalMatrix = new double[][]
+        {
+        {0,0,0,0,0,0,0,0},
+        {0,1,1,1,1,1,1,0},
+        {0,1,2,2,2,2,1,0},
+        {0,1,2,3,3,2,1,0},
+        {0,1,2,3,3,2,1,0},
+        {0,1,2,2,2,2,1,0},
+        {0,1,1,1,1,1,1,0},
+        {0,0,0,0,0,0,0,0}
+        };
+    
+    
+    
     public AI(int p){
         
 
@@ -79,22 +94,23 @@ public class AI {
     
     // counts the pieces on the board that belong to the AI player
     private double fitnessEvaluation(Piece[][] b){
-        double count = 0;
+        double score = 0;
         
         for(int i = 0; i < 8; i++){
             for(int j = 0; j < 8; j++){
                 if(b[i][j] != null){
                     if(!b[i][j].team){ // belongs to the AI player
-                        count++;
+                        score += 7; // good to have ai pieces
+                        score += positionalMatrix[i][j]; // want to control center of the board
                     }
-                    else{
-                        count--;
+                    else{ // not an Piece
+                        score -= 5; // bad to have player pieces
                     }
                 }
             }
         }
         
-        return count;
+        return score;
     }
     
     /*
